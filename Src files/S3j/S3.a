@@ -1,0 +1,280 @@
+; from S3j compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+          pc        x
+          pwc       3
+          pwc       -2
+          add 
+          pwc       1
+          add 
+          stav
+;x = + 3 + - 2 + 1 ; 
+          pc        y
+          p         x
+          stav
+;y = x ; 
+          pc        z
+          p         x
+          pwc       2
+          p         y
+          add 
+          mult
+          pwc       4099
+          add 
+          stav
+;z = x * ( 2 + y ) + ( ( ( 4099 ) ) ) ; 
+          p         z
+          p         x
+          add 
+          pwc       -2
+          add 
+          dout
+          pc        '\n'
+          aout
+;println ( z + x + - 2 ) ; 
+          pwc       4107
+          dout
+          pc        '\n'
+          aout
+;println ( 4107 ) ; 
+          pc        @L0
+          sout
+^@L0:     dw        "S1 test done"
+          pc        '\n'
+          aout
+;println ( "S1 test done" ) ; 
+          p         z
+          p         x
+          pwc       50
+          sub 
+          sub 
+          pwc       2
+          div 
+          p         x
+          sub 
+          dout
+          pc        '\n'
+          aout
+;println ( ( z - ( x - 50 ) ) / 2 - x ) ; 
+          pwc       2075
+          dout
+          pc        '\n'
+          aout
+;println ( 2075 ) ; 
+;; 
+; {
+; {
+;; 
+; {
+          pc        x
+          pwc       10
+          stav
+;x = 10 ; 
+;; 
+          pc        y
+          pwc       20
+          stav
+;y = 20 ; 
+; }
+; }
+;; 
+; }
+; {
+; }
+          p         x
+          dout
+;print ( x ) ; 
+          p         x
+          dout
+          pc        '\n'
+          aout
+;println ( x ) ; 
+          pwc       1010
+          dout
+          pc        '\n'
+          aout
+;println ( 1010 ) ; 
+          p         y
+          dout
+          pc        '\n'
+          aout
+;println ( y ) ; 
+          pwc       20
+          dout
+          pc        '\n'
+          aout
+;println ( 20 ) ; 
+          pc        x
+          pwc       1
+          pwc       2
+          pwc       3
+          pwc       4
+          add 
+          add 
+          add 
+          stav
+;x = 1 + ( 2 + ( 3 + 4 ) ) ; 
+          p         x
+          dout
+          pc        '\n'
+          aout
+;println ( x ) ; 
+          pwc       10
+          dout
+          pc        '\n'
+          aout
+;println ( 10 ) ; 
+          pc        x
+          pwc       1
+          pwc       2
+          add 
+          pwc       3
+          add 
+          pwc       4
+          add 
+          pwc       5
+          add 
+          stav
+;x = 1 + 2 + 3 + 4 + 5 ; 
+          p         x
+          dout
+          pc        '\n'
+          aout
+;println ( x ) ; 
+          pwc       15
+          dout
+          pc        '\n'
+          aout
+;println ( 15 ) ; 
+          pc        @L1
+          sout
+^@L1:     dw        "S2 test done"
+          pc        '\n'
+          aout
+;println ( "S2 test done" ) ; 
+          pc        @L2
+          sout
+^@L2:     dw        "four lines follow"
+          pc        '\n'
+          aout
+;println ( "four lines follow" ) ; 
+          pc        @L3
+          sout
+^@L3:     dw        "one line"
+;print ( "one line" ) ; 
+          pc        '\n'
+          aout
+;println ( ) ; 
+          pc        @L4
+          sout
+^@L4:     dw        "one line"
+          pc        '\n'
+          aout
+;println ( "one line" ) ; 
+          pc        @L5
+          sout
+^@L5:     dw        "third line\nfourth line"
+          pc        '\n'
+          aout
+;println ( "third line\nfourth line" ) ; 
+          pc        x
+          pc        y
+          pc        z
+          pwc       7
+          dupe
+          rot 
+          stav
+          dupe
+          rot 
+          stav
+          stav
+;x = y = z = + - - - - - + - 7 ; 
+          p         x
+          dout
+;print ( x ) ; 
+          pc        @L6
+          sout
+^@L6:     dw        " = "
+;print ( " = " ) ; 
+          p         y
+          dout
+;print ( y ) ; 
+          pc        @L7
+          sout
+^@L7:     dw        " = "
+;print ( " = " ) ; 
+          p         z
+          dout
+;print ( z ) ; 
+          pc        @L8
+          sout
+^@L8:     dw        " = "
+;print ( " = " ) ; 
+          pwc       7
+          dout
+          pc        '\n'
+          aout
+;println ( 7 ) ; 
+          pc        z
+          p         x
+          p         y
+          neg 
+          sub 
+          neg 
+          stav
+;z = - ( + x - + + - + + - + + + + - + + - + + - y ) ; 
+          pc        @L9
+          sout
+^@L9:     dw        "-14 = "
+;print ( "-14 = " ) ; 
+          p         z
+          dout
+;print ( z ) ; 
+          pc        @L10
+          sout
+^@L10:    dw        " = "
+;print ( " = " ) ; 
+          pwc       14
+          neg 
+          neg 
+          neg 
+          dout
+          pc        '\n'
+          aout
+;println ( - ( - ( + ( - ( 14 ) ) ) ) ) ; 
+          pc        @L11
+          sout
+^@L11:    dw        "////Enter integer////"
+          pc        '\n'
+          aout
+;println ( "////Enter integer////" ) ; 
+          pc        q
+          din 
+          stav
+;readint ( q ) ; 
+          pc        @L12
+          sout
+^@L12:    dw        "= "
+;print ( "= " ) ; 
+          p         q
+          pwc       1
+          add 
+          pwc       1
+          sub 
+          dout
+          pc        '\n'
+          aout
+;println ( q + + + + 1 - 1 ) ; 
+          pc        @L13
+          sout
+^@L13:    dw        "S3 test done"
+          pc        '\n'
+          aout
+;println ( "S3 test done" ) ; 
+
+          halt
+x:        dw        0
+y:        dw        0
+z:        dw        0
+q:        dw        0

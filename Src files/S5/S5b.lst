@@ -1,0 +1,62 @@
+a Assembler Version 1.7    Thu Apr 06 21:42:04 2017
+
+  LOC   MACHINE      ASSEMBLY
+hex*dec  CODE          CODE
+
+               ; from S5 compiler written by ...
+               ; Jackson Maddox
+               ; Liangyu Tan
+               ; Johirul Islam
+               ; // S5b.s test case (link object code with S5a.s)
+               ; int e = 30;
+                         public      e
+0  *0    001E  e:        dw        30
+               ; void g(int a, int b, int c)
+               ; =============== start of function g
+                         public      g
+               g:
+               ; {
+               ;    int x = 40, y = +50;
+1  *1    F900            esba
+2  *2    F700            pwc       40
+3  *3    0028
+4  *4    F700            pwc       50
+5  *5    0032
+               ;    int z = -60;
+6  *6    F700            pwc       -60
+7  *7    FFC4
+               ;    print("90 = ");
+8  *8    101A            pc        @L0
+9  *9    FFF7            sout
+               ;    println(a + b + c + x + y + z);
+A  *10   2004            pr        4
+B  *11   2003            pr        3
+C  *12   F100            add 
+D  *13   2002            pr        2
+E  *14   F100            add 
+F  *15   2FFF            pr        -1
+10 *16   F100            add 
+11 *17   2FFE            pr        -2
+12 *18   F100            add 
+13 *19   2FFD            pr        -3
+14 *20   F100            add 
+15 *21   FFFD            dout
+16 *22   100A            pc        '\n'
+17 *23   FFFB            aout
+               ; }
+18 *24   FA00            reba
+19 *25   F000            ret 
+               ; =============== end of function g
+               
+               ;====================== ^-lines follow ======
+1A *26   0039  @L0:      dw        "90 = "
+1B *27   0030
+1C *28   0020
+1D *29   003D
+1E *30   0020
+1F *31   0000
+20 *32   ========= end of S5b.a ============================
+
+asm in  = S5b.a
+asm out = S5b.o
+asm lst = S5b.lst 

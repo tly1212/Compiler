@@ -1,0 +1,43 @@
+; from S5 compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+; // S5b.s test case (link object code with S5a.s)
+; int e = 30;
+          public      e
+e:        dw        30
+; void g(int a, int b, int c)
+; =============== start of function g
+          public      g
+g:
+; {
+;    int x = 40, y = +50;
+          esba
+          pwc       40
+          pwc       50
+;    int z = -60;
+          pwc       -60
+;    print("90 = ");
+          pc        @L0
+          sout
+^@L0:     dw        "90 = "
+;    println(a + b + c + x + y + z);
+          pr        4
+          pr        3
+          add 
+          pr        2
+          add 
+          pr        -1
+          add 
+          pr        -2
+          add 
+          pr        -3
+          add 
+          dout
+          pc        '\n'
+          aout
+; }
+          reba
+          ret 
+; =============== end of function g
+

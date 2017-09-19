@@ -1,0 +1,31 @@
+e Version 1.7
+Log file S2.tanl.log
+
+Your name:          tanl liangyu 
+Machinecode file:   S2.e        
+Check file:         S2.chk
+Check data:         9f11 136 108 5457 7179
+
+=================== Wed Apr 12 16:29:09 2017 ==============r
+4107
+4107
+2075
+2075
+1010
+1010
+20
+20
+10
+10
+15
+15
+
+===========================================================r
+
+Report for:         tanl liangyu 
+Program output:     correct
+Machine code size:  136    (at limit)
+Machine inst count: 108    (at limit)
+Execution time:     5457   (at limit)
+
+================ r(9d84) terminated Wed Apr 12 16:29:09 2017

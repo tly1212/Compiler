@@ -1,0 +1,453 @@
+a Assembler Version 1.7    Wed Apr 12 17:31:09 2017
+
+  LOC   MACHINE      ASSEMBLY
+hex*dec  CODE          CODE
+
+               ; from S3j compiler written by ...
+               ; Jackson Maddox
+               ; Liangyu Tan
+               ; Johirul Islam
+0  *0    10E6            pc        x
+1  *1    F700            pwc       3
+2  *2    0003
+3  *3    F700            pwc       -2
+4  *4    FFFE
+5  *5    F100            add 
+6  *6    F700            pwc       1
+7  *7    0001
+8  *8    F100            add 
+9  *9    F300            stav
+               ;x = + 3 + - 2 + 1 ; 
+A  *10   10E7            pc        y
+B  *11   00E6            p         x
+C  *12   F300            stav
+               ;y = x ; 
+D  *13   10E8            pc        z
+E  *14   00E6            p         x
+F  *15   F700            pwc       2
+10 *16   0002
+11 *17   00E7            p         y
+12 *18   F100            add 
+13 *19   FF40            mult
+14 *20   F700            pwc       4099
+15 *21   1003
+16 *22   F100            add 
+17 *23   F300            stav
+               ;z = x * ( 2 + y ) + ( ( ( 4099 ) ) ) ; 
+18 *24   00E8            p         z
+19 *25   00E6            p         x
+1A *26   F100            add 
+1B *27   F700            pwc       -2
+1C *28   FFFE
+1D *29   F100            add 
+1E *30   FFFD            dout
+1F *31   100A            pc        '\n'
+20 *32   FFFB            aout
+               ;println ( z + x + - 2 ) ; 
+21 *33   F700            pwc       4107
+22 *34   100B
+23 *35   FFFD            dout
+24 *36   100A            pc        '\n'
+25 *37   FFFB            aout
+               ;println ( 4107 ) ; 
+26 *38   10EA            pc        @L0
+27 *39   FFF7            sout
+28 *40   100A            pc        '\n'
+29 *41   FFFB            aout
+               ;println ( "S1 test done" ) ; 
+2A *42   00E8            p         z
+2B *43   00E6            p         x
+2C *44   F700            pwc       50
+2D *45   0032
+2E *46   F200            sub 
+2F *47   F200            sub 
+30 *48   F700            pwc       2
+31 *49   0002
+32 *50   FF50            div 
+33 *51   00E6            p         x
+34 *52   F200            sub 
+35 *53   FFFD            dout
+36 *54   100A            pc        '\n'
+37 *55   FFFB            aout
+               ;println ( ( z - ( x - 50 ) ) / 2 - x ) ; 
+38 *56   F700            pwc       2075
+39 *57   081B
+3A *58   FFFD            dout
+3B *59   100A            pc        '\n'
+3C *60   FFFB            aout
+               ;println ( 2075 ) ; 
+               ;; 
+               ; {
+               ; {
+               ;; 
+               ; {
+3D *61   10E6            pc        x
+3E *62   F700            pwc       10
+3F *63   000A
+40 *64   F300            stav
+               ;x = 10 ; 
+               ;; 
+41 *65   10E7            pc        y
+42 *66   F700            pwc       20
+43 *67   0014
+44 *68   F300            stav
+               ;y = 20 ; 
+               ; }
+               ; }
+               ;; 
+               ; }
+               ; {
+               ; }
+45 *69   00E6            p         x
+46 *70   FFFD            dout
+               ;print ( x ) ; 
+47 *71   00E6            p         x
+48 *72   FFFD            dout
+49 *73   100A            pc        '\n'
+4A *74   FFFB            aout
+               ;println ( x ) ; 
+4B *75   F700            pwc       1010
+4C *76   03F2
+4D *77   FFFD            dout
+4E *78   100A            pc        '\n'
+4F *79   FFFB            aout
+               ;println ( 1010 ) ; 
+50 *80   00E7            p         y
+51 *81   FFFD            dout
+52 *82   100A            pc        '\n'
+53 *83   FFFB            aout
+               ;println ( y ) ; 
+54 *84   F700            pwc       20
+55 *85   0014
+56 *86   FFFD            dout
+57 *87   100A            pc        '\n'
+58 *88   FFFB            aout
+               ;println ( 20 ) ; 
+59 *89   10E6            pc        x
+5A *90   F700            pwc       1
+5B *91   0001
+5C *92   F700            pwc       2
+5D *93   0002
+5E *94   F700            pwc       3
+5F *95   0003
+60 *96   F700            pwc       4
+61 *97   0004
+62 *98   F100            add 
+63 *99   F100            add 
+64 *100  F100            add 
+65 *101  F300            stav
+               ;x = 1 + ( 2 + ( 3 + 4 ) ) ; 
+66 *102  00E6            p         x
+67 *103  FFFD            dout
+68 *104  100A            pc        '\n'
+69 *105  FFFB            aout
+               ;println ( x ) ; 
+6A *106  F700            pwc       10
+6B *107  000A
+6C *108  FFFD            dout
+6D *109  100A            pc        '\n'
+6E *110  FFFB            aout
+               ;println ( 10 ) ; 
+6F *111  10E6            pc        x
+70 *112  F700            pwc       1
+71 *113  0001
+72 *114  F700            pwc       2
+73 *115  0002
+74 *116  F100            add 
+75 *117  F700            pwc       3
+76 *118  0003
+77 *119  F100            add 
+78 *120  F700            pwc       4
+79 *121  0004
+7A *122  F100            add 
+7B *123  F700            pwc       5
+7C *124  0005
+7D *125  F100            add 
+7E *126  F300            stav
+               ;x = 1 + 2 + 3 + 4 + 5 ; 
+7F *127  00E6            p         x
+80 *128  FFFD            dout
+81 *129  100A            pc        '\n'
+82 *130  FFFB            aout
+               ;println ( x ) ; 
+83 *131  F700            pwc       15
+84 *132  000F
+85 *133  FFFD            dout
+86 *134  100A            pc        '\n'
+87 *135  FFFB            aout
+               ;println ( 15 ) ; 
+88 *136  10F7            pc        @L1
+89 *137  FFF7            sout
+8A *138  100A            pc        '\n'
+8B *139  FFFB            aout
+               ;println ( "S2 test done" ) ; 
+8C *140  1104            pc        @L2
+8D *141  FFF7            sout
+8E *142  100A            pc        '\n'
+8F *143  FFFB            aout
+               ;println ( "four lines follow" ) ; 
+90 *144  1116            pc        @L3
+91 *145  FFF7            sout
+               ;print ( "one line" ) ; 
+92 *146  100A            pc        '\n'
+93 *147  FFFB            aout
+               ;println ( ) ; 
+94 *148  111F            pc        @L4
+95 *149  FFF7            sout
+96 *150  100A            pc        '\n'
+97 *151  FFFB            aout
+               ;println ( "one line" ) ; 
+98 *152  1128            pc        @L5
+99 *153  FFF7            sout
+9A *154  100A            pc        '\n'
+9B *155  FFFB            aout
+               ;println ( "third line\nfourth line" ) ; 
+9C *156  10E6            pc        x
+9D *157  10E7            pc        y
+9E *158  10E8            pc        z
+9F *159  F700            pwc       7
+A0 *160  0007
+A1 *161  F800            dupe
+A2 *162  FFE0            rot 
+A3 *163  F300            stav
+A4 *164  F800            dupe
+A5 *165  FFE0            rot 
+A6 *166  F300            stav
+A7 *167  F300            stav
+               ;x = y = z = + - - - - - + - 7 ; 
+A8 *168  00E6            p         x
+A9 *169  FFFD            dout
+               ;print ( x ) ; 
+AA *170  113F            pc        @L6
+AB *171  FFF7            sout
+               ;print ( " = " ) ; 
+AC *172  00E7            p         y
+AD *173  FFFD            dout
+               ;print ( y ) ; 
+AE *174  1143            pc        @L7
+AF *175  FFF7            sout
+               ;print ( " = " ) ; 
+B0 *176  00E8            p         z
+B1 *177  FFFD            dout
+               ;print ( z ) ; 
+B2 *178  1147            pc        @L8
+B3 *179  FFF7            sout
+               ;print ( " = " ) ; 
+B4 *180  F700            pwc       7
+B5 *181  0007
+B6 *182  FFFD            dout
+B7 *183  100A            pc        '\n'
+B8 *184  FFFB            aout
+               ;println ( 7 ) ; 
+B9 *185  10E8            pc        z
+BA *186  00E6            p         x
+BB *187  00E7            p         y
+BC *188  FF30            neg 
+BD *189  F200            sub 
+BE *190  FF30            neg 
+BF *191  F300            stav
+               ;z = - ( + x - + + - + + - + + + + - + + - + + - y ) ; 
+C0 *192  114B            pc        @L9
+C1 *193  FFF7            sout
+               ;print ( "-14 = " ) ; 
+C2 *194  00E8            p         z
+C3 *195  FFFD            dout
+               ;print ( z ) ; 
+C4 *196  1152            pc        @L10
+C5 *197  FFF7            sout
+               ;print ( " = " ) ; 
+C6 *198  F700            pwc       14
+C7 *199  000E
+C8 *200  FF30            neg 
+C9 *201  FF30            neg 
+CA *202  FF30            neg 
+CB *203  FFFD            dout
+CC *204  100A            pc        '\n'
+CD *205  FFFB            aout
+               ;println ( - ( - ( + ( - ( 14 ) ) ) ) ) ; 
+CE *206  1156            pc        @L11
+CF *207  FFF7            sout
+D0 *208  100A            pc        '\n'
+D1 *209  FFFB            aout
+               ;println ( "////Enter integer////" ) ; 
+D2 *210  10E9            pc        q
+D3 *211  FFFC            din 
+D4 *212  F300            stav
+               ;readint ( q ) ; 
+D5 *213  116C            pc        @L12
+D6 *214  FFF7            sout
+               ;print ( "= " ) ; 
+D7 *215  00E9            p         q
+D8 *216  F700            pwc       1
+D9 *217  0001
+DA *218  F100            add 
+DB *219  F700            pwc       1
+DC *220  0001
+DD *221  F200            sub 
+DE *222  FFFD            dout
+DF *223  100A            pc        '\n'
+E0 *224  FFFB            aout
+               ;println ( q + + + + 1 - 1 ) ; 
+E1 *225  116F            pc        @L13
+E2 *226  FFF7            sout
+E3 *227  100A            pc        '\n'
+E4 *228  FFFB            aout
+               ;println ( "S3 test done" ) ; 
+               
+E5 *229  FFFF            halt
+E6 *230  0000  x:        dw        0
+E7 *231  0000  y:        dw        0
+E8 *232  0000  z:        dw        0
+E9 *233  0000  q:        dw        0
+               ;====================== ^-lines follow ======
+EA *234  0053  @L0:      dw        "S1 test done"
+EB *235  0031
+EC *236  0020
+ED *237  0074
+EE *238  0065
+EF *239  0073
+F0 *240  0074
+F1 *241  0020
+F2 *242  0064
+F3 *243  006F
+F4 *244  006E
+F5 *245  0065
+F6 *246  0000
+F7 *247  0053  @L1:      dw        "S2 test done"
+F8 *248  0032
+F9 *249  0020
+FA *250  0074
+FB *251  0065
+FC *252  0073
+FD *253  0074
+FE *254  0020
+FF *255  0064
+100*256  006F
+101*257  006E
+102*258  0065
+103*259  0000
+104*260  0066  @L2:      dw        "four lines follow"
+105*261  006F
+106*262  0075
+107*263  0072
+108*264  0020
+109*265  006C
+10A*266  0069
+10B*267  006E
+10C*268  0065
+10D*269  0073
+10E*270  0020
+10F*271  0066
+110*272  006F
+111*273  006C
+112*274  006C
+113*275  006F
+114*276  0077
+115*277  0000
+116*278  006F  @L3:      dw        "one line"
+117*279  006E
+118*280  0065
+119*281  0020
+11A*282  006C
+11B*283  0069
+11C*284  006E
+11D*285  0065
+11E*286  0000
+11F*287  006F  @L4:      dw        "one line"
+120*288  006E
+121*289  0065
+122*290  0020
+123*291  006C
+124*292  0069
+125*293  006E
+126*294  0065
+127*295  0000
+128*296  0074  @L5:      dw        "third line\nfourth line"
+129*297  0068
+12A*298  0069
+12B*299  0072
+12C*300  0064
+12D*301  0020
+12E*302  006C
+12F*303  0069
+130*304  006E
+131*305  0065
+132*306  000A
+133*307  0066
+134*308  006F
+135*309  0075
+136*310  0072
+137*311  0074
+138*312  0068
+139*313  0020
+13A*314  006C
+13B*315  0069
+13C*316  006E
+13D*317  0065
+13E*318  0000
+13F*319  0020  @L6:      dw        " = "
+140*320  003D
+141*321  0020
+142*322  0000
+143*323  0020  @L7:      dw        " = "
+144*324  003D
+145*325  0020
+146*326  0000
+147*327  0020  @L8:      dw        " = "
+148*328  003D
+149*329  0020
+14A*330  0000
+14B*331  002D  @L9:      dw        "-14 = "
+14C*332  0031
+14D*333  0034
+14E*334  0020
+14F*335  003D
+150*336  0020
+151*337  0000
+152*338  0020  @L10:     dw        " = "
+153*339  003D
+154*340  0020
+155*341  0000
+156*342  002F  @L11:     dw        "////Enter integer////"
+157*343  002F
+158*344  002F
+159*345  002F
+15A*346  0045
+15B*347  006E
+15C*348  0074
+15D*349  0065
+15E*350  0072
+15F*351  0020
+160*352  0069
+161*353  006E
+162*354  0074
+163*355  0065
+164*356  0067
+165*357  0065
+166*358  0072
+167*359  002F
+168*360  002F
+169*361  002F
+16A*362  002F
+16B*363  0000
+16C*364  003D  @L12:     dw        "= "
+16D*365  0020
+16E*366  0000
+16F*367  0053  @L13:     dw        "S3 test done"
+170*368  0033
+171*369  0020
+172*370  0074
+173*371  0065
+174*372  0073
+175*373  0074
+176*374  0020
+177*375  0064
+178*376  006F
+179*377  006E
+17A*378  0065
+17B*379  0000
+17C*380  ========= end of S3.a =============================
+
+asm in  = S3.a
+asm out = S3.e
+asm lst = S3.lst 

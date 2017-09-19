@@ -1,0 +1,65 @@
+e Version 1.7
+Log file S5a.tan.log
+
+Your name:          tan liangyu 
+Machinecode file:   S5a.e       
+Check file:         S5a.chk
+Check data:         91e2 1067 545 10290 b671
+
+=================== Mon Apr 17 20:55:57 2017 ==============r
+4107
+4107
+S1 test done
+2 = 2
+2075
+2075
+1010
+1010
+20
+20
+10
+10
+15
+15
+S2 test done
+four lines follow
+one line
+one line
+third line
+fourth line
+7 = 7 = 7 = 7
+-14 = -14 = -14
+////Enter integer////
+123
+= 123
+S3 test done
+2 1 on separate lines
+2
+1
+hello -3 up to hello -1
+hello -3
+hello -2
+hello -1
+bye 2 down to bye 1
+bye 2
+bye 1
+Next line should say "hello" with the quotes
+"hello"
+good = good
+Next line should say "bye" without the quotes
+bye
+"3 backslashes and a double quote \\\" within a string"
+S4 test done
+90 = 90
+-8 = -8
+S5 test done
+
+===========================================================r
+
+Report for:         tan liangyu 
+Program output:     correct
+Machine code size:  1069   (2    OVER LIMIT ) <----- WARNING
+Machine inst count: 545    (at limit)
+Execution time:     10290  (at limit)
+
+================ r(86c0) terminated Mon Apr 17 20:55:57 2017

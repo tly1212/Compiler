@@ -1,0 +1,37 @@
+; from S5j compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+          public      e
+e:        dw        30
+; =============== start of function g
+          public      g
+g:
+          esba
+          pwc       40
+          pwc       50
+          pwc       -60
+          pc        @L0
+          sout
+^@L0:     dw        "90 = "
+;print ( "90 = " ) ; 
+          pr        4
+          pr        3
+          add 
+          pr        2
+          add 
+          pr        -1
+          add 
+          pr        -2
+          add 
+          pr        -3
+          add 
+          dout
+          pc        '\n'
+          aout
+;println ( a + b + c + x + y + z ) ; 
+          reba
+          ret 
+; =============== end of function g
+
+          halt

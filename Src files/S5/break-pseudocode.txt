@@ -1,0 +1,31 @@
+ArrayList<String> loopExitAddrs;
+
+
+whileStatement() {
+
+	//
+
+	//
+
+	label2 = cg.getLabel();
+	loopExitAddrs.add(label2);
+
+	statement();
+
+	loopExitAddrs.remove(loopExitAddrs.size()-1);
+}
+
+
+breakStatement() {
+	consume(BREAK);
+	if (loopExitAddrs.size() == 0) throw genEx("Not in a loop");
+	cg.emitInstruction("ja", loopExitAddrs.get(loopExitAddrs.size()-1));
+	consume(SEMICOLON);
+}
+
+
+statement() {
+	case BREAK:
+		breakStatement();
+		break;
+}

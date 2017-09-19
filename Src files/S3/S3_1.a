@@ -1,0 +1,14 @@
+; from S3 compiler written by ...
+; x = -1;
+          pc        x
+          pwc       -1
+          stav
+; y = -x;
+          pc        y
+          p         x
+          neg 
+          stav
+; z = --y;
+          pc        z
+Encountered "y" on line 3, column 7.
+Expecting <UNSIGNED>

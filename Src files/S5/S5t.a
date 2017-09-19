@@ -1,0 +1,37 @@
+; from S5 compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+; int x = 2;
+          public      x
+x:        dw        2
+; void main(){
+; =============== start of function main
+          public      main
+main:
+; 	while(x){
+          esba
+@L0:
+          p         x
+          jz        @L1
+; 	println(x);
+          p         x
+          dout
+          pc        '\n'
+          aout
+; 	//if(x == 1)
+; 	//break;
+; 	x = x-1;
+          pc        x
+          p         x
+          pwc       1
+          sub 
+; 	}
+          stav
+; }
+          ja        @L0
+@L1:
+          reba
+          ret 
+; =============== end of function main
+

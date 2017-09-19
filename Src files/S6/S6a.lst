@@ -1,0 +1,74 @@
+a Assembler Version 1.7    Mon Apr 24 13:27:59 2017
+
+  LOC   MACHINE      ASSEMBLY
+hex*dec  CODE          CODE
+
+               ; from S6 compiler written by ...
+               ; Jackson Maddox
+               ; Liangyu Tan
+               ; Johirul Islam
+               ; void main()
+               ; =============== start of function main
+                         public      main
+               main:
+               ; {
+               ;    t();
+0  *0    F900            esba
+1  *1    5004            call      t
+               ; }
+               ; void t()
+2  *2    FA00            reba
+3  *3    F000            ret 
+               ; =============== end of function main
+               ; =============== start of function t
+                         public      t
+               t:
+               ; {
+               ; 	for(int i = 0; i < 3; i = i + 1){
+4  *4    F900            esba
+               @L0:
+                         public      i
+5  *5    0000  i:        dw        0
+6  *6    0005            p         i
+7  *7    0019            p         @3
+8  *8    FC04            cmps      4
+9  *9    1005            pc        i
+A  *10   0005            p         i
+B  *11   0018            p         @1
+C  *12   F100            add 
+D  *13   F300            stav
+E  *14   A016            jz        @L1
+               ; 		//if(i == 2) break;
+               ; 		print("loop ");
+F  *15   101A            pc        @L2
+10 *16   FFF7            sout
+               ; 		println(i);
+11 *17   0005            p         i
+12 *18   FFFD            dout
+13 *19   100A            pc        '\n'
+14 *20   FFFB            aout
+               ; 	}
+               ; }
+15 *21   6005            ja        @L0
+               @L1:
+               ; 
+               ; 
+               ; 
+16 *22   FA00            reba
+17 *23   F000            ret 
+               ; =============== end of function t
+               
+18 *24   0001  @1:       dw        1
+19 *25   0003  @3:       dw        3
+               ;====================== ^-lines follow ======
+1A *26   006C  @L2:      dw        "loop "
+1B *27   006F
+1C *28   006F
+1D *29   0070
+1E *30   0020
+1F *31   0000
+20 *32   ========= end of S6a.a ============================
+
+asm in  = S6a.a
+asm out = S6a.o
+asm lst = S6a.lst 

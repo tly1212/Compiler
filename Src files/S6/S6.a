@@ -1,0 +1,43 @@
+; from S6 compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+; int x = 5;
+          public      x
+x:        dw        5
+; void main(){
+; =============== start of function main
+          public      main
+main:
+; 	//while(x){
+; 	//println(x);
+; 	
+; 	//break;
+; 	//x = x-1;
+; 	//}
+; 
+; 	do{
+          esba
+@L0:
+; 	println(x);
+          p         x
+          dout
+          pc        '\n'
+          aout
+; 	x = x-1;
+          pc        x
+          p         x
+          pwc       1
+          sub 
+; 	break;
+          stav
+          ja        @L1
+; 	}while(x);
+          p         x
+; }
+          jnz       @L0
+@L1:
+          reba
+          ret 
+; =============== end of function main
+

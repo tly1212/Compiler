@@ -1,0 +1,365 @@
+; from S7 compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+; int g1 = -10;
+          public      g1
+g1:       dw        -10
+; int garr[3];
+          public      garr
+garr:     dw        "\0\0"
+; int g2 = -50;
+          public      g2
+g2:       dw        -50
+; 
+; int x = 10;
+          public      x
+x:        dw        10
+; int y = 20;
+          public      y
+y:        dw        20
+; int z;
+          public      z
+z:        dw        0
+; 
+; void main() {
+; =============== start of function main
+          public      main
+main:
+; 	println("===Basic array test===");
+          esba
+          pc        @L0
+          sout
+^@L0:     dw        "===Basic array test==="
+          pc        '\n'
+          aout
+; 	basicArrayTest();
+          call      basicArrayTest
+; 	println("===Global array test===");
+          pc        @L1
+          sout
+^@L1:     dw        "===Global array test==="
+          pc        '\n'
+          aout
+; 	globalArrayTest();
+          call      globalArrayTest
+; 	println("===For loop test===");
+          pc        @L2
+          sout
+^@L2:     dw        "===For loop test==="
+          pc        '\n'
+          aout
+; 	forLoopTest();
+          call      forLoopTest
+; 	println("===Formatting print test===");
+          pc        @L3
+          sout
+^@L3:     dw        "===Formatting print test==="
+          pc        '\n'
+          aout
+; 	formattedPrintTest();
+          call      formattedPrintTest
+; 	println();
+          pc        '\n'
+          aout
+; }
+; 
+; void basicArrayTest() {
+          reba
+          ret 
+; =============== end of function main
+; =============== start of function basicArrayTest
+          public      basicArrayTest
+basicArrayTest:
+; 	int i;
+          esba
+          asp       -1
+; 	int a[5];
+          asp       -6
+          cora      -2
+          p         @5
+          stav
+; 	int x = 5;
+          p         @5
+; 
+; 	a[1] = 20;
+          cora      -2
+          p         @1
+          sub 
+          p         @20
+; 	a[2] = 30;
+          stav
+          cora      -2
+          p         @2
+          sub 
+          p         @30
+; 	a[3] = 200;
+          stav
+          cora      -2
+          p         @3
+          sub 
+          p         @200
+; 	a[4] = 5000;
+          stav
+          cora      -2
+          p         @4
+          sub 
+          p         @5000
+; 	a[5] = 2;
+          stav
+          cora      -2
+          p         @5
+          sub 
+          p         @2
+; 
+; 	i = 1;
+          stav
+          cora      -1
+          p         @1
+; 	x = a[0]; // x is size of array
+          stav
+          cora      -8
+          cora      -2
+          p         @0
+          sub 
+          load
+; 	while (x > 0) {
+          stav
+@L4:
+          pr        -8
+          p         @0
+          cmps      1
+          jz        @L5
+; 		a[x] = a[x] + 1;
+          cora      -2
+          pr        -8
+          sub 
+          cora      -2
+          pr        -8
+          sub 
+          load
+          p         @1
+          add 
+; 		println(a[x]);
+          stav
+          cora      -2
+          pr        -8
+          sub 
+          load
+          dout
+          pc        '\n'
+          aout
+; 		x = x - 1;
+          cora      -8
+          pr        -8
+          p         @1
+          sub 
+; 	}
+          stav
+; }
+          ja        @L4
+@L5:
+; 
+; void globalArrayTest() {
+          reba
+          ret 
+; =============== end of function basicArrayTest
+; =============== start of function globalArrayTest
+          public      globalArrayTest
+globalArrayTest:
+; 	int i;
+          esba
+          asp       -1
+; 	garr[1] = 20;
+          pc        garr
+          p         @1
+          add 
+          p         @20
+; 	garr[2] = 30;
+          stav
+          pc        garr
+          p         @2
+          add 
+          p         @30
+; 	garr[3] = 40;
+          stav
+          pc        garr
+          p         @3
+          add 
+          p         @40
+; 
+; 	println("printing garr:");
+          stav
+          pc        @L6
+          sout
+^@L6:     dw        "printing garr:"
+          pc        '\n'
+          aout
+; 	i = 0;
+          cora      -1
+          p         @0
+; 	while (i <= garr[0]) {
+          stav
+@L7:
+          pr        -1
+          pc        garr
+          p         @0
+          add 
+          load
+          cmps      6
+          jz        @L8
+; 		println(garr[i]);
+          pc        garr
+          pr        -1
+          add 
+          load
+          dout
+          pc        '\n'
+          aout
+; 		i = i + 1;
+          cora      -1
+          pr        -1
+          p         @1
+          add 
+; 	}
+          stav
+; 
+; 	println("Bounds checking:");
+          ja        @L7
+@L8:
+          pc        @L9
+          sout
+^@L9:     dw        "Bounds checking:"
+          pc        '\n'
+          aout
+; 	print("g1 -10 = ");
+          pc        @L10
+          sout
+^@L10:    dw        "g1 -10 = "
+; 	println(g1);
+          p         g1
+          dout
+          pc        '\n'
+          aout
+; 
+; 	print("g2 -50 = ");
+          pc        @L11
+          sout
+^@L11:    dw        "g2 -50 = "
+; 	println(g2);
+          p         g2
+          dout
+          pc        '\n'
+          aout
+; 
+; 	println("Out of bounds test:");
+          pc        @L12
+          sout
+^@L12:    dw        "Out of bounds test:"
+          pc        '\n'
+          aout
+; 	println(garr[-1]);
+          pc        garr
+          p         @_1
+          add 
+          load
+          dout
+          pc        '\n'
+          aout
+; 	println(garr[4]);
+          pc        garr
+          p         @4
+          add 
+          load
+          dout
+          pc        '\n'
+          aout
+; }
+; 
+; void forLoopTest()
+          reba
+          ret 
+; =============== end of function globalArrayTest
+; =============== start of function forLoopTest
+          public      forLoopTest
+forLoopTest:
+; {
+; 	for(int i = 0; i <= 3; i = i + 1){
+          esba
+          p         @0
+@L13:
+          pr        -1
+          p         @3
+          cmps      6
+          jz        @L14
+          cora      -1
+          pr        -1
+          p         @1
+          add 
+          stav
+; 		//if(i == 2) break;
+; 		print("loop ");
+          pc        @L15
+          sout
+^@L15:    dw        "loop "
+; 		println(i);
+          pr        -1
+          dout
+          pc        '\n'
+          aout
+; 	}
+; }
+          ja        @L13
+@L14:
+; 
+; void formattedPrintTest()
+          reba
+          ret 
+; =============== end of function forLoopTest
+; =============== start of function formattedPrintTest
+          public      formattedPrintTest
+formattedPrintTest:
+; {
+; 	z = x+y;
+          esba
+          pc        z
+          p         x
+          p         y
+          add 
+;    print("The result of {0} + {1} = {2}",x,y,z);
+          stav
+          pc        @LL15
+          sout
+^@LL15:   dw        "The result of "
+          p         x
+          dout
+          pc        @LL21
+          sout
+^@LL21:   dw        " + "
+          p         y
+          dout
+          pc        @LL27
+          sout
+^@LL27:   dw        " = "
+          p         z
+          dout
+          pc        @L16
+          sout
+^@L16:    dw        ""
+; }
+          reba
+          ret 
+; =============== end of function formattedPrintTest
+
+@0:       dw        0
+@1:       dw        1
+@2:       dw        2
+@_1:      dw        -1
+@3:       dw        3
+@4:       dw        4
+@5:       dw        5
+@5000:    dw        5000
+@40:      dw        40
+@30:      dw        30
+@20:      dw        20
+@200:     dw        200

@@ -1,0 +1,44 @@
+e Version 1.7
+Log file S3.tan.log
+
+Your name:          tan liangyu 
+Machinecode file:   S3.e        
+Check file:         S3.chk
+Check data:         7ada 380 200 6309 9d71
+
+=================== Wed Apr 12 17:31:11 2017 ==============r
+4107
+4107
+S1 test done
+2075
+2075
+1010
+1010
+20
+20
+10
+10
+15
+15
+S2 test done
+four lines follow
+one line
+one line
+third line
+fourth line
+7 = 7 = 7 = 7
+-14 = -14 = -14
+////Enter integer////
+123
+= 123
+S3 test done
+
+===========================================================r
+
+Report for:         tan liangyu 
+Program output:     correct
+Machine code size:  380    (at limit)
+Machine inst count: 200    (at limit)
+Execution time:     6309   (at limit)
+
+================ r(10aa) terminated Wed Apr 12 17:31:11 2017

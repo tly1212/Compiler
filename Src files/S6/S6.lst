@@ -1,0 +1,54 @@
+a Assembler Version 1.7    Fri Apr 07 15:09:07 2017
+
+  LOC   MACHINE      ASSEMBLY
+hex*dec  CODE          CODE
+
+               ; from S6 compiler written by ...
+               ; Jackson Maddox
+               ; Liangyu Tan
+               ; Johirul Islam
+               ; int x = 5;
+                         public      x
+0  *0    0005  x:        dw        5
+               ; void main(){
+               ; =============== start of function main
+                         public      main
+               main:
+               ; 	//while(x){
+               ; 	//println(x);
+               ; 	
+               ; 	//break;
+               ; 	//x = x-1;
+               ; 	//}
+               ; 
+               ; 	do{
+1  *1    F900            esba
+               @L0:
+               ; 	println(x);
+2  *2    0000            p         x
+3  *3    FFFD            dout
+4  *4    100A            pc        '\n'
+5  *5    FFFB            aout
+               ; 	x = x-1;
+6  *6    1000            pc        x
+7  *7    0000            p         x
+8  *8    F700            pwc       1
+9  *9    0001
+A  *10   F200            sub 
+               ; 	break;
+B  *11   F300            stav
+C  *12   600F            ja        @L1
+               ; 	}while(x);
+D  *13   0000            p         x
+               ; }
+E  *14   B002            jnz       @L0
+               @L1:
+F  *15   FA00            reba
+10 *16   F000            ret 
+               ; =============== end of function main
+               
+11 *17   ========= end of S6.a =============================
+
+asm in  = S6.a
+asm out = S6.o
+asm lst = S6.lst 

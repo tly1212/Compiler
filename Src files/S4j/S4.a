@@ -1,0 +1,504 @@
+; from S4j compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+          pc        x
+          pwc       3
+          pwc       -2
+          add 
+          pwc       1
+          add 
+          stav
+;x = + 3 + - 2 + 1 ; 
+          pc        y
+          p         x
+          stav
+;y = x ; 
+          pc        z
+          p         x
+          pwc       2
+          p         y
+          add 
+          mult
+          pwc       4099
+          add 
+          stav
+;z = x * ( 2 + y ) + ( ( ( 4099 ) ) ) ; 
+          p         z
+          p         x
+          add 
+          pwc       -2
+          add 
+          dout
+          pc        '\n'
+          aout
+;println ( z + x + - 2 ) ; 
+          pwc       4107
+          dout
+          pc        '\n'
+          aout
+;println ( 4107 ) ; 
+          pc        @L0
+          sout
+^@L0:     dw        "S1 test done"
+          pc        '\n'
+          aout
+;println ( "S1 test done" ) ; 
+          p         z
+          p         x
+          pwc       50
+          sub 
+          sub 
+          pwc       2
+          div 
+          p         x
+          sub 
+          dout
+          pc        '\n'
+          aout
+;println ( ( z - ( x - 50 ) ) / 2 - x ) ; 
+          pwc       2075
+          dout
+          pc        '\n'
+          aout
+;println ( 2075 ) ; 
+;; 
+; {
+; {
+;; 
+; {
+          pc        x
+          pwc       10
+          stav
+;x = 10 ; 
+;; 
+          pc        y
+          pwc       20
+          stav
+;y = 20 ; 
+; }
+; }
+;; 
+; }
+; {
+; }
+          p         x
+          dout
+;print ( x ) ; 
+          p         x
+          dout
+          pc        '\n'
+          aout
+;println ( x ) ; 
+          pwc       1010
+          dout
+          pc        '\n'
+          aout
+;println ( 1010 ) ; 
+          p         y
+          dout
+          pc        '\n'
+          aout
+;println ( y ) ; 
+          pwc       20
+          dout
+          pc        '\n'
+          aout
+;println ( 20 ) ; 
+          pc        x
+          pwc       1
+          pwc       2
+          pwc       3
+          pwc       4
+          add 
+          add 
+          add 
+          stav
+;x = 1 + ( 2 + ( 3 + 4 ) ) ; 
+          p         x
+          dout
+          pc        '\n'
+          aout
+;println ( x ) ; 
+          pwc       10
+          dout
+          pc        '\n'
+          aout
+;println ( 10 ) ; 
+          pc        x
+          pwc       1
+          pwc       2
+          add 
+          pwc       3
+          add 
+          pwc       4
+          add 
+          pwc       5
+          add 
+          stav
+;x = 1 + 2 + 3 + 4 + 5 ; 
+          p         x
+          dout
+          pc        '\n'
+          aout
+;println ( x ) ; 
+          pwc       15
+          dout
+          pc        '\n'
+          aout
+;println ( 15 ) ; 
+          pc        @L1
+          sout
+^@L1:     dw        "S2 test done"
+          pc        '\n'
+          aout
+;println ( "S2 test done" ) ; 
+          pc        @L2
+          sout
+^@L2:     dw        "four lines follow"
+          pc        '\n'
+          aout
+;println ( "four lines follow" ) ; 
+          pc        @L3
+          sout
+^@L3:     dw        "one line"
+;print ( "one line" ) ; 
+          pc        '\n'
+          aout
+;println ( ) ; 
+          pc        @L4
+          sout
+^@L4:     dw        "one line"
+          pc        '\n'
+          aout
+;println ( "one line" ) ; 
+          pc        @L5
+          sout
+^@L5:     dw        "third line\nfourth line"
+          pc        '\n'
+          aout
+;println ( "third line\nfourth line" ) ; 
+          pc        x
+          pc        y
+          pc        z
+          pwc       7
+          dupe
+          rot 
+          stav
+          dupe
+          rot 
+          stav
+          stav
+;x = y = z = + - - - - - + - 7 ; 
+          p         x
+          dout
+;print ( x ) ; 
+          pc        @L6
+          sout
+^@L6:     dw        " = "
+;print ( " = " ) ; 
+          p         y
+          dout
+;print ( y ) ; 
+          pc        @L7
+          sout
+^@L7:     dw        " = "
+;print ( " = " ) ; 
+          p         z
+          dout
+;print ( z ) ; 
+          pc        @L8
+          sout
+^@L8:     dw        " = "
+;print ( " = " ) ; 
+          pwc       7
+          dout
+          pc        '\n'
+          aout
+;println ( 7 ) ; 
+          pc        z
+          p         x
+          p         y
+          neg 
+          sub 
+          neg 
+          stav
+;z = - ( + x - + + - + + - + + + + - + + - + + - y ) ; 
+          pc        @L9
+          sout
+^@L9:     dw        "-14 = "
+;print ( "-14 = " ) ; 
+          p         z
+          dout
+;print ( z ) ; 
+          pc        @L10
+          sout
+^@L10:    dw        " = "
+;print ( " = " ) ; 
+          pwc       14
+          neg 
+          neg 
+          neg 
+          dout
+          pc        '\n'
+          aout
+;println ( - ( - ( + ( - ( 14 ) ) ) ) ) ; 
+          pc        @L11
+          sout
+^@L11:    dw        "////Enter integer////"
+          pc        '\n'
+          aout
+;println ( "////Enter integer////" ) ; 
+          pc        q
+          din 
+          stav
+;readint ( q ) ; 
+          pc        @L12
+          sout
+^@L12:    dw        "= "
+;print ( "= " ) ; 
+          p         q
+          pwc       1
+          add 
+          pwc       1
+          sub 
+          dout
+          pc        '\n'
+          aout
+;println ( q + + + + 1 - 1 ) ; 
+          pc        @L13
+          sout
+^@L13:    dw        "S3 test done"
+          pc        '\n'
+          aout
+;println ( "S3 test done" ) ; 
+          pc        x
+          pwc       1
+          stav
+;x = 1 ; 
+          pc        @L14
+          sout
+^@L14:    dw        "2 1 on separate lines"
+          pc        '\n'
+          aout
+;println ( "2 1 on separate lines" ) ; 
+@L15:
+          p         x
+          jz        @L16
+; {
+          pc        y
+          pwc       2
+          stav
+;y = 2 ; 
+@L17:
+          p         y
+          jz        @L18
+; {
+          p         y
+          dout
+          pc        '\n'
+          aout
+;println ( y ) ; 
+          pc        y
+          p         y
+          pwc       1
+          sub 
+          stav
+;y = y - 1 ; 
+; }
+          ja        @L17
+@L18:
+;while ( y ) { println ( y ) ; y = y - 1 ; } 
+          pc        x
+          p         x
+          pwc       1
+          sub 
+          stav
+;x = x - 1 ; 
+; }
+          ja        @L15
+@L16:
+;while ( x ) { y = 2 ; while ( y ) { println ( y ) ; y = y - 1 ; } x = x - 1 ; } 
+          pc        zero
+          pwc       0
+          stav
+;zero = 0 ; 
+@L19:
+          p         zero
+          jz        @L20
+          pc        @L21
+          sout
+^@L21:    dw        "bug"
+          pc        '\n'
+          aout
+;println ( "bug" ) ; 
+          ja        @L19
+@L20:
+;while ( zero ) println ( "bug" ) ; 
+          pc        x
+          pwc       0
+          pwc       3
+          sub 
+          stav
+;x = 0 - 3 ; 
+          pc        @L22
+          sout
+^@L22:    dw        "hello -3 up to hello -1\n"
+;print ( "hello -3 up to hello -1\n" ) ; 
+@L23:
+          p         x
+          jz        @L24
+; {
+          p         x
+          jz        @L25
+          pc        @L26
+          sout
+^@L26:    dw        "hello "
+;print ( "hello " ) ; 
+          ja        @L27
+@L25:
+          pc        @L28
+          sout
+^@L28:    dw        "bug1"
+          pc        '\n'
+          aout
+;println ( "bug1" ) ; 
+@L27:
+;if ( x ) print ( "hello " ) ; else println ( "bug1" ) ; 
+          p         x
+          dout
+          pc        '\n'
+          aout
+;println ( x ) ; 
+          pc        x
+          p         x
+          pwc       1
+          add 
+          stav
+;x = x + 1 ; 
+; }
+          ja        @L23
+@L24:
+;while ( x ) { if ( x ) print ( "hello " ) ; else println ( "bug1" ) ; println ( x ) ; x = x + 1 ; } 
+          pc        x
+          pwc       2
+          stav
+;x = 2 ; 
+          pc        @L29
+          sout
+^@L29:    dw        "bye 2 down to bye 1\n"
+;print ( "bye 2 down to bye 1\n" ) ; 
+@L30:
+; {
+          pc        @L31
+          sout
+^@L31:    dw        "bye "
+;print ( "bye " ) ; 
+          p         x
+          dout
+          pc        '\n'
+          aout
+;println ( x ) ; 
+          pc        x
+          p         x
+          pwc       1
+          sub 
+          stav
+;x = x - 1 ; 
+; }
+          p         x
+          jnz       @L30
+;do { print ( "bye " ) ; println ( x ) ; x = x - 1 ; } while ( x ) ; 
+          pc        x
+          pwc       1
+          stav
+;x = 1 ; 
+          pc        @L32
+          sout
+^@L32:    dw        "Next line should say \"hello\" with the quotes"
+          pc        '\n'
+          aout
+;println ( "Next line should say \"hello\" with the quotes" ) ; 
+          p         x
+          jz        @L33
+          p         x
+          jz        @L34
+          p         x
+          jz        @L35
+; {
+          pc        @L36
+          sout
+^@L36:    dw        "\"hel"
+;print ( "\"hel" ) ; 
+          pc        @L37
+          sout
+^@L37:    dw        "lo\""
+          pc        '\n'
+          aout
+;println ( "lo\"" ) ; 
+; }
+          ja        @L38
+@L35:
+; {
+          pc        @L39
+          sout
+^@L39:    dw        "bug3"
+          pc        '\n'
+          aout
+;println ( "bug3" ) ; 
+; }
+@L38:
+;if ( x ) { print ( "\"hel" ) ; println ( "lo\"" ) ; } else { println ( "bug3" ) ; } 
+@L34:
+;if ( x ) if ( x ) { print ( "\"hel" ) ; println ( "lo\"" ) ; } else { println ( "bug3" ) ; } 
+@L33:
+;if ( x ) if ( x ) if ( x ) { print ( "\"hel" ) ; println ( "lo\"" ) ; } else { println ( "bug3" ) ; } 
+          pc        @L40
+          sout
+^@L40:    dw        "good = "
+;print ( "good = " ) ; 
+          p         zero
+          jz        @L41
+; {
+          pc        @L42
+          sout
+^@L42:    dw        "bug4"
+          pc        '\n'
+          aout
+;println ( "bug4" ) ; 
+; }
+          ja        @L43
+@L41:
+          pc        @L44
+          sout
+^@L44:    dw        "good"
+          pc        '\n'
+          aout
+;println ( "good" ) ; 
+@L43:
+;if ( zero ) { println ( "bug4" ) ; } else println ( "good" ) ; 
+          pc        @L45
+          sout
+^@L45:    dw        "Next line should say \"bye\" without the quotes\nbye"
+          pc        '\n'
+          aout
+;println ( "Next line should say \"bye\" without the quotes\nbye" ) ; 
+          pc        @L46
+          sout
+^@L46:    dw        "\"3 backslashes and a double quote \\\\\\\" within a string\""
+          pc        '\n'
+          aout
+;println ( "\"3 backslashes and a double quote \\\\\\\" within a string\"" ) ; 
+          pc        @L47
+          sout
+^@L47:    dw        "S4 test done"
+          pc        '\n'
+          aout
+;println ( "S4 test done" ) ; 
+
+          halt
+x:        dw        0
+y:        dw        0
+z:        dw        0
+q:        dw        0
+zero:     dw        0

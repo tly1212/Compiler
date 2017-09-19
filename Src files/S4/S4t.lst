@@ -1,0 +1,144 @@
+a Assembler Version 1.7    Thu Mar 30 22:29:11 2017
+
+  LOC   MACHINE      ASSEMBLY
+hex*dec  CODE          CODE
+
+               ; from S4 compiler written by ...
+               ; Jackson Maddox
+               ; Liangyu Tan
+               ; Johirul Islam
+               ; x = 3;
+0  *0    103F            pc        x
+1  *1    F700            pwc       3
+2  *2    0003
+               ; while(x){
+3  *3    F300            stav
+               @L0:
+4  *4    003F            p         x
+5  *5    A011            jz        @L1
+               ; println(x);
+6  *6    003F            p         x
+7  *7    FFFD            dout
+8  *8    100A            pc        '\n'
+9  *9    FFFB            aout
+               ; x = x-1;
+A  *10   103F            pc        x
+B  *11   003F            p         x
+C  *12   F700            pwc       1
+D  *13   0001
+E  *14   F200            sub 
+               ; }
+F  *15   F300            stav
+               ; y = 3;
+10 *16   6004            ja        @L0
+               @L1:
+11 *17   1040            pc        y
+12 *18   F700            pwc       3
+13 *19   0003
+               ; do{
+14 *20   F300            stav
+               @L2:
+               ; println(y);
+15 *21   0040            p         y
+16 *22   FFFD            dout
+17 *23   100A            pc        '\n'
+18 *24   FFFB            aout
+               ; y = y -1;
+19 *25   1040            pc        y
+1A *26   0040            p         y
+1B *27   F700            pwc       1
+1C *28   0001
+1D *29   F200            sub 
+               ; }while(y);
+1E *30   F300            stav
+1F *31   0040            p         y
+               ; q = -32768;
+20 *32   B015            jnz       @L2
+21 *33   1041            pc        q
+22 *34   F700            pwc       -32768
+23 *35   8000
+               ; 
+               ; m = 1;
+24 *36   F300            stav
+25 *37   1042            pc        m
+26 *38   F700            pwc       1
+27 *39   0001
+               ; n = 0;
+28 *40   F300            stav
+29 *41   1043            pc        n
+2A *42   F700            pwc       0
+2B *43   0000
+               ; if(m)
+2C *44   F300            stav
+2D *45   0042            p         m
+               ; 	if(m){
+2E *46   A03A            jz        @L3
+2F *47   0042            p         m
+30 *48   A036            jz        @L4
+               ; 	println("hello\\");}
+31 *49   1044            pc        @L5
+32 *50   FFF7            sout
+33 *51   100A            pc        '\n'
+34 *52   FFFB            aout
+               ; 	else{
+35 *53   603A            ja        @L6
+               @L4:
+               ; 	println("you\\\"");}
+36 *54   104B            pc        @L7
+37 *55   FFF7            sout
+38 *56   100A            pc        '\n'
+39 *57   FFFB            aout
+               ; 
+               ; println("no separate\
+               @L6:
+               @L3:
+               ; \
+               ; \
+               ;  line");
+3A *58   1051            pc        @L8
+3B *59   FFF7            sout
+3C *60   100A            pc        '\n'
+3D *61   FFFB            aout
+               
+3E *62   FFFF            halt
+3F *63   0000  x:        dw        0
+40 *64   0000  y:        dw        0
+41 *65   0000  q:        dw        0
+42 *66   0000  m:        dw        0
+43 *67   0000  n:        dw        0
+               ;====================== ^-lines follow ======
+44 *68   0068  @L5:      dw        "hello\\"
+45 *69   0065
+46 *70   006C
+47 *71   006C
+48 *72   006F
+49 *73   005C
+4A *74   0000
+4B *75   0079  @L7:      dw        "you\\\""
+4C *76   006F
+4D *77   0075
+4E *78   005C
+4F *79   0022
+50 *80   0000
+51 *81   006E  @L8:      dw        "no separate line"
+52 *82   006F
+53 *83   0020
+54 *84   0073
+55 *85   0065
+56 *86   0070
+57 *87   0061
+58 *88   0072
+59 *89   0061
+5A *90   0074
+5B *91   0065
+5C *92   0020
+5D *93   006C
+5E *94   0069
+5F *95   006E
+60 *96   0065
+61 *97   0000
+62 *98   ========= end of S4t.a ============================
+
+asm in  = S4t.a
+asm out = S4t.e
+asm lst = S4t.lst 

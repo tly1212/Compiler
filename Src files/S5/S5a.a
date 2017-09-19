@@ -1,0 +1,608 @@
+; from S5 compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+; // s5a.s test case
+; // To create executable program and to execute it, enter
+; // java S5 S5a
+; // java S5 S5b
+; // a s5a.a s5b.a sup
+; // e s5a /c
+; int x, z = -10, zero;
+          public      x
+x:        dw        0
+          public      z
+z:        dw        -10
+          public      zero
+zero:     dw        0
+; extern int e;
+          extern      e
+; void main()
+; =============== start of function main
+          public      main
+main:
+; {
+;    int y, z;
+          esba
+          asp       -1
+          asp       -1
+; 
+;    x = +3 + -2 + 1;
+          pc        x
+          pwc       3
+          pwc       -2
+          add 
+          pwc       1
+          add 
+;    y = x;
+          stav
+          cora      -1
+          p         x
+;    z = x*(2 + y) + (((4099)));
+          stav
+          cora      -2
+          p         x
+          pwc       2
+          pr        -1
+          add 
+          mult
+          pwc       4099
+          add 
+;    println(z + x + -2);
+          stav
+          pr        -2
+          p         x
+          add 
+          pwc       -2
+          add 
+          dout
+          pc        '\n'
+          aout
+;    println(4107);
+          pwc       4107
+          dout
+          pc        '\n'
+          aout
+;    println("S1 test done");
+          pc        @L0
+          sout
+^@L0:     dw        "S1 test done"
+          pc        '\n'
+          aout
+; //===============================================================
+;    f(x + zero + z - 4107, z);
+          p         x
+          p         zero
+          add 
+          pr        -2
+          add 
+          pwc       4107
+          sub 
+          pr        -2
+          call      f
+          asp       2
+;    g(10, 20, e);
+          pwc       10
+          pwc       20
+          p         e
+          call      g
+          asp       3
+;    h();
+          call      h
+;    println("S5 test done");
+          pc        @L1
+          sout
+^@L1:     dw        "S5 test done"
+          pc        '\n'
+          aout
+; }
+; int y = +2;
+          reba
+          ret 
+; =============== end of function main
+          public      y
+y:        dw        2
+; void f(int x, int z)
+; =============== start of function f
+          public      f
+f:
+; {
+;    int q;
+          esba
+          asp       -1
+;    print("2 = ");
+          pc        @L2
+          sout
+^@L2:     dw        "2 = "
+;    println(y);
+          p         y
+          dout
+          pc        '\n'
+          aout
+; //==========================================================
+; // Add support for subtraction, division, null statement, 
+; // compound statement, print statement, and single-line
+; // comments.
+;    println((z - (x - 50)   // comment in middle of statement
+          pr        2
+          pr        3
+          pwc       50
+          sub 
+;         ) / 2 - x);
+          sub 
+          pwc       2
+          div 
+          pr        3
+          sub 
+          dout
+          pc        '\n'
+          aout
+;    println(2075);
+          pwc       2075
+          dout
+          pc        '\n'
+          aout
+;    ;                       // null statement 
+;    {{;                     // compound statement
+;       {
+;       x = 10;  
+          cora      3
+          pwc       10
+;       ;
+          stav
+;       y = 20;
+          pc        y
+          pwc       20
+;    }};}
+          stav
+;    {}
+;    print(x);
+          pr        3
+          dout
+;    println(x);
+          pr        3
+          dout
+          pc        '\n'
+          aout
+;    println(1010);
+          pwc       1010
+          dout
+          pc        '\n'
+          aout
+;    println(y);
+          p         y
+          dout
+          pc        '\n'
+          aout
+;    println(20);
+          pwc       20
+          dout
+          pc        '\n'
+          aout
+;    x = 1 + (2 + (3+ 4));
+          cora      3
+          pwc       1
+          pwc       2
+          pwc       3
+          pwc       4
+          add 
+          add 
+          add 
+;    println(x);
+          stav
+          pr        3
+          dout
+          pc        '\n'
+          aout
+;    println(10);
+          pwc       10
+          dout
+          pc        '\n'
+          aout
+;    x = 1 + 2 + 3 + 4 + 5;
+          cora      3
+          pwc       1
+          pwc       2
+          add 
+          pwc       3
+          add 
+          pwc       4
+          add 
+          pwc       5
+          add 
+;    println(x);
+          stav
+          pr        3
+          dout
+          pc        '\n'
+          aout
+;    println(15);
+          pwc       15
+          dout
+          pc        '\n'
+          aout
+;    println("S2 test done");
+          pc        @L3
+          sout
+^@L3:     dw        "S2 test done"
+          pc        '\n'
+          aout
+; //==========================================================
+; // Add support, println with zero arguments, println and 
+; // print with string argument, cascaded assignment 
+; // statement, unary plus and minus, and readint statement.
+;    println("four lines follow");
+          pc        @L4
+          sout
+^@L4:     dw        "four lines follow"
+          pc        '\n'
+          aout
+;    print("one line");
+          pc        @L5
+          sout
+^@L5:     dw        "one line"
+;    println();
+          pc        '\n'
+          aout
+;    println("one line");
+          pc        @L6
+          sout
+^@L6:     dw        "one line"
+          pc        '\n'
+          aout
+;    println("third line\nfourth line");
+          pc        @L7
+          sout
+^@L7:     dw        "third line\nfourth line"
+          pc        '\n'
+          aout
+;    x = y = z = + - - - - - + -7;
+          cora      3
+          pc        y
+          cora      2
+          pwc       7
+;    print(x);
+          dupe
+          rot 
+          stav
+          dupe
+          rot 
+          stav
+          stav
+          pr        3
+          dout
+;    print(" = ");
+          pc        @L8
+          sout
+^@L8:     dw        " = "
+;    print(y);
+          p         y
+          dout
+;    print(" = ");
+          pc        @L9
+          sout
+^@L9:     dw        " = "
+;    print(z);
+          pr        2
+          dout
+;    print(" = ");
+          pc        @L10
+          sout
+^@L10:    dw        " = "
+;    println(7);
+          pwc       7
+          dout
+          pc        '\n'
+          aout
+;    z = -(+x - + + - + + - + + + + - + + - + + -y);
+          cora      2
+          pr        3
+          p         y
+          neg 
+          sub 
+          neg 
+;    print ("-14 = ");
+          stav
+          pc        @L11
+          sout
+^@L11:    dw        "-14 = "
+;    print(z);
+          pr        2
+          dout
+;    print(" = ");
+          pc        @L12
+          sout
+^@L12:    dw        " = "
+;    println(-(-(+(-(14))))); 
+          pwc       14
+          neg 
+          neg 
+          neg 
+          dout
+          pc        '\n'
+          aout
+;    // no comment in following statement because // inside string
+;    println("////Enter integer////");   
+          pc        @L13
+          sout
+^@L13:    dw        "////Enter integer////"
+          pc        '\n'
+          aout
+;    readint(q);
+          cora      -1
+          din 
+          stav
+;    print("= ");
+          pc        @L14
+          sout
+^@L14:    dw        "= "
+;    println(q + + + + 1 - 1); 
+          pr        -1
+          pwc       1
+          add 
+          pwc       1
+          sub 
+          dout
+          pc        '\n'
+          aout
+;    println("S3 test done"); 
+          pc        @L15
+          sout
+^@L15:    dw        "S3 test done"
+          pc        '\n'
+          aout
+; //==========================================================
+; // Add support for while, do-while, if, if-else, and escape 
+; // sequences within a string.
+;    x = 1;
+          cora      3
+          pwc       1
+;    println("2 1 on separate lines");
+          stav
+          pc        @L16
+          sout
+^@L16:    dw        "2 1 on separate lines"
+          pc        '\n'
+          aout
+;    while(x)               // nested while loops
+@L17:
+          pr        3
+;    {
+          jz        @L18
+;       y = 2;
+          pc        y
+          pwc       2
+;       while (y)
+          stav
+@L19:
+          p         y
+;       {
+          jz        @L20
+;          println(y);
+          p         y
+          dout
+          pc        '\n'
+          aout
+;          y = y -  1;      
+          pc        y
+          p         y
+          pwc       1
+          sub 
+;       }
+          stav
+;       x = x - 1;
+          ja        @L19
+@L20:
+          cora      3
+          pr        3
+          pwc       1
+          sub 
+;    }
+          stav
+;    zero = 0;
+          ja        @L17
+@L18:
+          pc        zero
+          pwc       0
+;    while (zero)
+          stav
+@L21:
+          p         zero
+;       println("bug");
+          jz        @L22
+          pc        @L23
+          sout
+^@L23:    dw        "bug"
+          pc        '\n'
+          aout
+;    x = 0 - 3;
+          ja        @L21
+@L22:
+          cora      3
+          pwc       0
+          pwc       3
+          sub 
+;    print("hello -3 up to hello -1\n");
+          stav
+          pc        @L24
+          sout
+^@L24:    dw        "hello -3 up to hello -1\n"
+;    while (x)              // if inside while
+@L25:
+          pr        3
+;    {
+          jz        @L26
+;       if (x) print("hello ");
+          pr        3
+          jz        @L27
+          pc        @L28
+          sout
+^@L28:    dw        "hello "
+;       else println("bug1");
+          ja        @L29
+@L27:
+          pc        @L30
+          sout
+^@L30:    dw        "bug1"
+          pc        '\n'
+          aout
+;       println(x);
+@L29:
+          pr        3
+          dout
+          pc        '\n'
+          aout
+;       x = x + 1;
+          cora      3
+          pr        3
+          pwc       1
+          add 
+;    }
+          stav
+;    x = 2;
+          ja        @L25
+@L26:
+          cora      3
+          pwc       2
+;    print("bye 2 down to bye 1\n");
+          stav
+          pc        @L31
+          sout
+^@L31:    dw        "bye 2 down to bye 1\n"
+;    do                     // do-while loop
+;    {
+@L32:
+;       print("bye ");
+          pc        @L33
+          sout
+^@L33:    dw        "bye "
+;       println(x);
+          pr        3
+          dout
+          pc        '\n'
+          aout
+;       x = x - 1;
+          cora      3
+          pr        3
+          pwc       1
+          sub 
+;    } while (x);
+          stav
+          pr        3
+;    x = 1;
+          jnz       @L32
+          cora      3
+          pwc       1
+;    println("Next line should \
+          stav
+; say \"hello\" with the quotes");
+          pc        @L34
+          sout
+^@L34:    dw        "Next line should say \"hello\" with the quotes"
+          pc        '\n'
+          aout
+;    if (x)                 // nested if
+          pr        3
+;    if (x)
+          jz        @L35
+          pr        3
+;    if (x) 
+          jz        @L36
+          pr        3
+;    {
+          jz        @L37
+;       print("\"hel");
+          pc        @L38
+          sout
+^@L38:    dw        "\"hel"
+;       println("lo\"");
+          pc        @L39
+          sout
+^@L39:    dw        "lo\""
+          pc        '\n'
+          aout
+;    }
+;    else 
+;    {
+          ja        @L40
+@L37:
+;       println("bug3");
+          pc        @L41
+          sout
+^@L41:    dw        "bug3"
+          pc        '\n'
+          aout
+;    }
+;    print("good = ");
+@L40:
+@L36:
+@L35:
+          pc        @L42
+          sout
+^@L42:    dw        "good = "
+;    if (zero)             // execute else part 
+          p         zero
+;    {
+          jz        @L43
+;       println("bug4");
+          pc        @L44
+          sout
+^@L44:    dw        "bug4"
+          pc        '\n'
+          aout
+;    }
+;    else 
+;       println("good");
+          ja        @L45
+@L43:
+          pc        @L46
+          sout
+^@L46:    dw        "good"
+          pc        '\n'
+          aout
+;    println("Next line should say \"bye\" without the quotes\nbye");
+@L45:
+          pc        @L47
+          sout
+^@L47:    dw        "Next line should say \"bye\" without the quotes\nbye"
+          pc        '\n'
+          aout
+;    println("\"3 backslashes and a double quote \\\\\\\" within a string\"");
+          pc        @L48
+          sout
+^@L48:    dw        "\"3 backslashes and a double quote \\\\\\\" within a string\""
+          pc        '\n'
+          aout
+;    println("S4 test done");
+          pc        @L49
+          sout
+^@L49:    dw        "S4 test done"
+          pc        '\n'
+          aout
+; }
+; void h()
+          reba
+          ret 
+; =============== end of function f
+; =============== start of function h
+          public      h
+h:
+; {
+;    print("-8 = ");
+          esba
+          pc        @L50
+          sout
+^@L50:    dw        "-8 = "
+;    println(x + z);
+          p         x
+          p         z
+          add 
+          dout
+          pc        '\n'
+          aout
+; }
+          reba
+          ret 
+; =============== end of function h
+
+          extern      g

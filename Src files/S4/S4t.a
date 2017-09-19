@@ -1,0 +1,99 @@
+; from S4 compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+; x = 3;
+          pc        x
+          pwc       3
+; while(x){
+          stav
+@L0:
+          p         x
+          jz        @L1
+; println(x);
+          p         x
+          dout
+          pc        '\n'
+          aout
+; x = x-1;
+          pc        x
+          p         x
+          pwc       1
+          sub 
+; }
+          stav
+; y = 3;
+          ja        @L0
+@L1:
+          pc        y
+          pwc       3
+; do{
+          stav
+@L2:
+; println(y);
+          p         y
+          dout
+          pc        '\n'
+          aout
+; y = y -1;
+          pc        y
+          p         y
+          pwc       1
+          sub 
+; }while(y);
+          stav
+          p         y
+; q = -32768;
+          jnz       @L2
+          pc        q
+          pwc       -32768
+; 
+; m = 1;
+          stav
+          pc        m
+          pwc       1
+; n = 0;
+          stav
+          pc        n
+          pwc       0
+; if(m)
+          stav
+          p         m
+; 	if(m){
+          jz        @L3
+          p         m
+          jz        @L4
+; 	println("hello\\");}
+          pc        @L5
+          sout
+^@L5:     dw        "hello\\"
+          pc        '\n'
+          aout
+; 	else{
+          ja        @L6
+@L4:
+; 	println("you\\\"");}
+          pc        @L7
+          sout
+^@L7:     dw        "you\\\""
+          pc        '\n'
+          aout
+; 
+; println("no separate\
+@L6:
+@L3:
+; \
+; \
+;  line");
+          pc        @L8
+          sout
+^@L8:     dw        "no separate line"
+          pc        '\n'
+          aout
+
+          halt
+x:        dw        0
+y:        dw        0
+q:        dw        0
+m:        dw        0
+n:        dw        0

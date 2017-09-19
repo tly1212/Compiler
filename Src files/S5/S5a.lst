@@ -1,0 +1,1084 @@
+a Assembler Version 1.7    Thu Apr 06 21:48:12 2017
+
+  LOC   MACHINE      ASSEMBLY
+hex*dec  CODE          CODE
+
+               ; from S5 compiler written by ...
+               ; Jackson Maddox
+               ; Liangyu Tan
+               ; Johirul Islam
+               ; // s5a.s test case
+               ; // To create executable program and to execute it, enter
+               ; // java S5 S5a
+               ; // java S5 S5b
+               ; // a s5a.a s5b.a sup
+               ; // e s5a /c
+               ; int x, z = -10, zero;
+                         public      x
+0  *0    0000  x:        dw        0
+                         public      z
+1  *1    FFF6  z:        dw        -10
+                         public      zero
+2  *2    0000  zero:     dw        0
+               ; extern int e;
+                         extern      e
+               ; void main()
+               ; =============== start of function main
+                         public      main
+               main:
+               ; {
+               ;    int y, z;
+3  *3    F900            esba
+4  *4    4FFF            asp       -1
+5  *5    4FFF            asp       -1
+               ; 
+               ;    x = +3 + -2 + 1;
+6  *6    1000            pc        x
+7  *7    F700            pwc       3
+8  *8    0003
+9  *9    F700            pwc       -2
+A  *10   FFFE
+B  *11   F100            add 
+C  *12   F700            pwc       1
+D  *13   0001
+E  *14   F100            add 
+               ;    y = x;
+F  *15   F300            stav
+10 *16   3FFF            cora      -1
+11 *17   0000            p         x
+               ;    z = x*(2 + y) + (((4099)));
+12 *18   F300            stav
+13 *19   3FFE            cora      -2
+14 *20   0000            p         x
+15 *21   F700            pwc       2
+16 *22   0002
+17 *23   2FFF            pr        -1
+18 *24   F100            add 
+19 *25   FF40            mult
+1A *26   F700            pwc       4099
+1B *27   1003
+1C *28   F100            add 
+               ;    println(z + x + -2);
+1D *29   F300            stav
+1E *30   2FFE            pr        -2
+1F *31   0000            p         x
+20 *32   F100            add 
+21 *33   F700            pwc       -2
+22 *34   FFFE
+23 *35   F100            add 
+24 *36   FFFD            dout
+25 *37   100A            pc        '\n'
+26 *38   FFFB            aout
+               ;    println(4107);
+27 *39   F700            pwc       4107
+28 *40   100B
+29 *41   FFFD            dout
+2A *42   100A            pc        '\n'
+2B *43   FFFB            aout
+               ;    println("S1 test done");
+2C *44   11AC            pc        @L0
+2D *45   FFF7            sout
+2E *46   100A            pc        '\n'
+2F *47   FFFB            aout
+               ; //============================================================
+               ;    f(x + zero + z - 4107, z);
+30 *48   0000            p         x
+31 *49   0002            p         zero
+32 *50   F100            add 
+33 *51   2FFE            pr        -2
+34 *52   F100            add 
+35 *53   F700            pwc       4107
+36 *54   100B
+37 *55   F200            sub 
+38 *56   2FFE            pr        -2
+39 *57   504A            call      f
+3A *58   4002            asp       2
+               ;    g(10, 20, e);
+3B *59   F700            pwc       10
+3C *60   000A
+3D *61   F700            pwc       20
+3E *62   0014
+3F *63   0000            p         e
+40 *64   5000            call      g
+41 *65   4003            asp       3
+               ;    h();
+42 *66   51A1            call      h
+               ;    println("S5 test done");
+43 *67   11B9            pc        @L1
+44 *68   FFF7            sout
+45 *69   100A            pc        '\n'
+46 *70   FFFB            aout
+               ; }
+               ; int y = +2;
+47 *71   FA00            reba
+48 *72   F000            ret 
+               ; =============== end of function main
+                         public      y
+49 *73   0002  y:        dw        2
+               ; void f(int x, int z)
+               ; =============== start of function f
+                         public      f
+               f:
+               ; {
+               ;    int q;
+4A *74   F900            esba
+4B *75   4FFF            asp       -1
+               ;    print("2 = ");
+4C *76   11C6            pc        @L2
+4D *77   FFF7            sout
+               ;    println(y);
+4E *78   0049            p         y
+4F *79   FFFD            dout
+50 *80   100A            pc        '\n'
+51 *81   FFFB            aout
+               ; //==========================================================
+               ; // Add support for subtraction, division, null statement, 
+               ; // compound statement, print statement, and single-line
+               ; // comments.
+               ;    println((z - (x - 50)   // comment in middle of statement
+52 *82   2002            pr        2
+53 *83   2003            pr        3
+54 *84   F700            pwc       50
+55 *85   0032
+56 *86   F200            sub 
+               ;         ) / 2 - x);
+57 *87   F200            sub 
+58 *88   F700            pwc       2
+59 *89   0002
+5A *90   FF50            div 
+5B *91   2003            pr        3
+5C *92   F200            sub 
+5D *93   FFFD            dout
+5E *94   100A            pc        '\n'
+5F *95   FFFB            aout
+               ;    println(2075);
+60 *96   F700            pwc       2075
+61 *97   081B
+62 *98   FFFD            dout
+63 *99   100A            pc        '\n'
+64 *100  FFFB            aout
+               ;    ;                       // null statement 
+               ;    {{;                     // compound statement
+               ;       {
+               ;       x = 10;  
+65 *101  3003            cora      3
+66 *102  F700            pwc       10
+67 *103  000A
+               ;       ;
+68 *104  F300            stav
+               ;       y = 20;
+69 *105  1049            pc        y
+6A *106  F700            pwc       20
+6B *107  0014
+               ;    }};}
+6C *108  F300            stav
+               ;    {}
+               ;    print(x);
+6D *109  2003            pr        3
+6E *110  FFFD            dout
+               ;    println(x);
+6F *111  2003            pr        3
+70 *112  FFFD            dout
+71 *113  100A            pc        '\n'
+72 *114  FFFB            aout
+               ;    println(1010);
+73 *115  F700            pwc       1010
+74 *116  03F2
+75 *117  FFFD            dout
+76 *118  100A            pc        '\n'
+77 *119  FFFB            aout
+               ;    println(y);
+78 *120  0049            p         y
+79 *121  FFFD            dout
+7A *122  100A            pc        '\n'
+7B *123  FFFB            aout
+               ;    println(20);
+7C *124  F700            pwc       20
+7D *125  0014
+7E *126  FFFD            dout
+7F *127  100A            pc        '\n'
+80 *128  FFFB            aout
+               ;    x = 1 + (2 + (3+ 4));
+81 *129  3003            cora      3
+82 *130  F700            pwc       1
+83 *131  0001
+84 *132  F700            pwc       2
+85 *133  0002
+86 *134  F700            pwc       3
+87 *135  0003
+88 *136  F700            pwc       4
+89 *137  0004
+8A *138  F100            add 
+8B *139  F100            add 
+8C *140  F100            add 
+               ;    println(x);
+8D *141  F300            stav
+8E *142  2003            pr        3
+8F *143  FFFD            dout
+90 *144  100A            pc        '\n'
+91 *145  FFFB            aout
+               ;    println(10);
+92 *146  F700            pwc       10
+93 *147  000A
+94 *148  FFFD            dout
+95 *149  100A            pc        '\n'
+96 *150  FFFB            aout
+               ;    x = 1 + 2 + 3 + 4 + 5;
+97 *151  3003            cora      3
+98 *152  F700            pwc       1
+99 *153  0001
+9A *154  F700            pwc       2
+9B *155  0002
+9C *156  F100            add 
+9D *157  F700            pwc       3
+9E *158  0003
+9F *159  F100            add 
+A0 *160  F700            pwc       4
+A1 *161  0004
+A2 *162  F100            add 
+A3 *163  F700            pwc       5
+A4 *164  0005
+A5 *165  F100            add 
+               ;    println(x);
+A6 *166  F300            stav
+A7 *167  2003            pr        3
+A8 *168  FFFD            dout
+A9 *169  100A            pc        '\n'
+AA *170  FFFB            aout
+               ;    println(15);
+AB *171  F700            pwc       15
+AC *172  000F
+AD *173  FFFD            dout
+AE *174  100A            pc        '\n'
+AF *175  FFFB            aout
+               ;    println("S2 test done");
+B0 *176  11CB            pc        @L3
+B1 *177  FFF7            sout
+B2 *178  100A            pc        '\n'
+B3 *179  FFFB            aout
+               ; //==========================================================
+               ; // Add support, println with zero arguments, println and 
+               ; // print with string argument, cascaded assignment 
+               ; // statement, unary plus and minus, and readint statement.
+               ;    println("four lines follow");
+B4 *180  11D8            pc        @L4
+B5 *181  FFF7            sout
+B6 *182  100A            pc        '\n'
+B7 *183  FFFB            aout
+               ;    print("one line");
+B8 *184  11EA            pc        @L5
+B9 *185  FFF7            sout
+               ;    println();
+BA *186  100A            pc        '\n'
+BB *187  FFFB            aout
+               ;    println("one line");
+BC *188  11F3            pc        @L6
+BD *189  FFF7            sout
+BE *190  100A            pc        '\n'
+BF *191  FFFB            aout
+               ;    println("third line\nfourth line");
+C0 *192  11FC            pc        @L7
+C1 *193  FFF7            sout
+C2 *194  100A            pc        '\n'
+C3 *195  FFFB            aout
+               ;    x = y = z = + - - - - - + -7;
+C4 *196  3003            cora      3
+C5 *197  1049            pc        y
+C6 *198  3002            cora      2
+C7 *199  F700            pwc       7
+C8 *200  0007
+               ;    print(x);
+C9 *201  F800            dupe
+CA *202  FFE0            rot 
+CB *203  F300            stav
+CC *204  F800            dupe
+CD *205  FFE0            rot 
+CE *206  F300            stav
+CF *207  F300            stav
+D0 *208  2003            pr        3
+D1 *209  FFFD            dout
+               ;    print(" = ");
+D2 *210  1213            pc        @L8
+D3 *211  FFF7            sout
+               ;    print(y);
+D4 *212  0049            p         y
+D5 *213  FFFD            dout
+               ;    print(" = ");
+D6 *214  1217            pc        @L9
+D7 *215  FFF7            sout
+               ;    print(z);
+D8 *216  2002            pr        2
+D9 *217  FFFD            dout
+               ;    print(" = ");
+DA *218  121B            pc        @L10
+DB *219  FFF7            sout
+               ;    println(7);
+DC *220  F700            pwc       7
+DD *221  0007
+DE *222  FFFD            dout
+DF *223  100A            pc        '\n'
+E0 *224  FFFB            aout
+               ;    z = -(+x - + + - + + - + + + + - + + - + + -y);
+E1 *225  3002            cora      2
+E2 *226  2003            pr        3
+E3 *227  0049            p         y
+E4 *228  FF30            neg 
+E5 *229  F200            sub 
+E6 *230  FF30            neg 
+               ;    print ("-14 = ");
+E7 *231  F300            stav
+E8 *232  121F            pc        @L11
+E9 *233  FFF7            sout
+               ;    print(z);
+EA *234  2002            pr        2
+EB *235  FFFD            dout
+               ;    print(" = ");
+EC *236  1226            pc        @L12
+ED *237  FFF7            sout
+               ;    println(-(-(+(-(14))))); 
+EE *238  F700            pwc       14
+EF *239  000E
+F0 *240  FF30            neg 
+F1 *241  FF30            neg 
+F2 *242  FF30            neg 
+F3 *243  FFFD            dout
+F4 *244  100A            pc        '\n'
+F5 *245  FFFB            aout
+               ;    // no comment in following statement because // inside stri
+               ;    println("////Enter integer////");   
+F6 *246  122A            pc        @L13
+F7 *247  FFF7            sout
+F8 *248  100A            pc        '\n'
+F9 *249  FFFB            aout
+               ;    readint(q);
+FA *250  3FFF            cora      -1
+FB *251  FFFC            din 
+FC *252  F300            stav
+               ;    print("= ");
+FD *253  1240            pc        @L14
+FE *254  FFF7            sout
+               ;    println(q + + + + 1 - 1); 
+FF *255  2FFF            pr        -1
+100*256  F700            pwc       1
+101*257  0001
+102*258  F100            add 
+103*259  F700            pwc       1
+104*260  0001
+105*261  F200            sub 
+106*262  FFFD            dout
+107*263  100A            pc        '\n'
+108*264  FFFB            aout
+               ;    println("S3 test done"); 
+109*265  1243            pc        @L15
+10A*266  FFF7            sout
+10B*267  100A            pc        '\n'
+10C*268  FFFB            aout
+               ; //==========================================================
+               ; // Add support for while, do-while, if, if-else, and escape 
+               ; // sequences within a string.
+               ;    x = 1;
+10D*269  3003            cora      3
+10E*270  F700            pwc       1
+10F*271  0001
+               ;    println("2 1 on separate lines");
+110*272  F300            stav
+111*273  1250            pc        @L16
+112*274  FFF7            sout
+113*275  100A            pc        '\n'
+114*276  FFFB            aout
+               ;    while(x)               // nested while loops
+               @L17:
+115*277  2003            pr        3
+               ;    {
+116*278  A12F            jz        @L18
+               ;       y = 2;
+117*279  1049            pc        y
+118*280  F700            pwc       2
+119*281  0002
+               ;       while (y)
+11A*282  F300            stav
+               @L19:
+11B*283  0049            p         y
+               ;       {
+11C*284  A128            jz        @L20
+               ;          println(y);
+11D*285  0049            p         y
+11E*286  FFFD            dout
+11F*287  100A            pc        '\n'
+120*288  FFFB            aout
+               ;          y = y -  1;      
+121*289  1049            pc        y
+122*290  0049            p         y
+123*291  F700            pwc       1
+124*292  0001
+125*293  F200            sub 
+               ;       }
+126*294  F300            stav
+               ;       x = x - 1;
+127*295  611B            ja        @L19
+               @L20:
+128*296  3003            cora      3
+129*297  2003            pr        3
+12A*298  F700            pwc       1
+12B*299  0001
+12C*300  F200            sub 
+               ;    }
+12D*301  F300            stav
+               ;    zero = 0;
+12E*302  6115            ja        @L17
+               @L18:
+12F*303  1002            pc        zero
+130*304  F700            pwc       0
+131*305  0000
+               ;    while (zero)
+132*306  F300            stav
+               @L21:
+133*307  0002            p         zero
+               ;       println("bug");
+134*308  A13A            jz        @L22
+135*309  1266            pc        @L23
+136*310  FFF7            sout
+137*311  100A            pc        '\n'
+138*312  FFFB            aout
+               ;    x = 0 - 3;
+139*313  6133            ja        @L21
+               @L22:
+13A*314  3003            cora      3
+13B*315  F700            pwc       0
+13C*316  0000
+13D*317  F700            pwc       3
+13E*318  0003
+13F*319  F200            sub 
+               ;    print("hello -3 up to hello -1\n");
+140*320  F300            stav
+141*321  126A            pc        @L24
+142*322  FFF7            sout
+               ;    while (x)              // if inside while
+               @L25:
+143*323  2003            pr        3
+               ;    {
+144*324  A159            jz        @L26
+               ;       if (x) print("hello ");
+145*325  2003            pr        3
+146*326  A14A            jz        @L27
+147*327  1283            pc        @L28
+148*328  FFF7            sout
+               ;       else println("bug1");
+149*329  614E            ja        @L29
+               @L27:
+14A*330  128A            pc        @L30
+14B*331  FFF7            sout
+14C*332  100A            pc        '\n'
+14D*333  FFFB            aout
+               ;       println(x);
+               @L29:
+14E*334  2003            pr        3
+14F*335  FFFD            dout
+150*336  100A            pc        '\n'
+151*337  FFFB            aout
+               ;       x = x + 1;
+152*338  3003            cora      3
+153*339  2003            pr        3
+154*340  F700            pwc       1
+155*341  0001
+156*342  F100            add 
+               ;    }
+157*343  F300            stav
+               ;    x = 2;
+158*344  6143            ja        @L25
+               @L26:
+159*345  3003            cora      3
+15A*346  F700            pwc       2
+15B*347  0002
+               ;    print("bye 2 down to bye 1\n");
+15C*348  F300            stav
+15D*349  128F            pc        @L31
+15E*350  FFF7            sout
+               ;    do                     // do-while loop
+               ;    {
+               @L32:
+               ;       print("bye ");
+15F*351  12A4            pc        @L33
+160*352  FFF7            sout
+               ;       println(x);
+161*353  2003            pr        3
+162*354  FFFD            dout
+163*355  100A            pc        '\n'
+164*356  FFFB            aout
+               ;       x = x - 1;
+165*357  3003            cora      3
+166*358  2003            pr        3
+167*359  F700            pwc       1
+168*360  0001
+169*361  F200            sub 
+               ;    } while (x);
+16A*362  F300            stav
+16B*363  2003            pr        3
+               ;    x = 1;
+16C*364  B15F            jnz       @L32
+16D*365  3003            cora      3
+16E*366  F700            pwc       1
+16F*367  0001
+               ;    println("Next line should \
+170*368  F300            stav
+               ; say \"hello\" with the quotes");
+171*369  12A9            pc        @L34
+172*370  FFF7            sout
+173*371  100A            pc        '\n'
+174*372  FFFB            aout
+               ;    if (x)                 // nested if
+175*373  2003            pr        3
+               ;    if (x)
+176*374  A186            jz        @L35
+177*375  2003            pr        3
+               ;    if (x) 
+178*376  A186            jz        @L36
+179*377  2003            pr        3
+               ;    {
+17A*378  A182            jz        @L37
+               ;       print("\"hel");
+17B*379  12D6            pc        @L38
+17C*380  FFF7            sout
+               ;       println("lo\"");
+17D*381  12DB            pc        @L39
+17E*382  FFF7            sout
+17F*383  100A            pc        '\n'
+180*384  FFFB            aout
+               ;    }
+               ;    else 
+               ;    {
+181*385  6186            ja        @L40
+               @L37:
+               ;       println("bug3");
+182*386  12DF            pc        @L41
+183*387  FFF7            sout
+184*388  100A            pc        '\n'
+185*389  FFFB            aout
+               ;    }
+               ;    print("good = ");
+               @L40:
+               @L36:
+               @L35:
+186*390  12E4            pc        @L42
+187*391  FFF7            sout
+               ;    if (zero)             // execute else part 
+188*392  0002            p         zero
+               ;    {
+189*393  A18F            jz        @L43
+               ;       println("bug4");
+18A*394  12EC            pc        @L44
+18B*395  FFF7            sout
+18C*396  100A            pc        '\n'
+18D*397  FFFB            aout
+               ;    }
+               ;    else 
+               ;       println("good");
+18E*398  6193            ja        @L45
+               @L43:
+18F*399  12F1            pc        @L46
+190*400  FFF7            sout
+191*401  100A            pc        '\n'
+192*402  FFFB            aout
+               ;    println("Next line should say \"bye\" without the quotes\nb
+               @L45:
+193*403  12F6            pc        @L47
+194*404  FFF7            sout
+195*405  100A            pc        '\n'
+196*406  FFFB            aout
+               ;    println("\"3 backslashes and a double quote \\\\\\\" within
+197*407  1328            pc        @L48
+198*408  FFF7            sout
+199*409  100A            pc        '\n'
+19A*410  FFFB            aout
+               ;    println("S4 test done");
+19B*411  1360            pc        @L49
+19C*412  FFF7            sout
+19D*413  100A            pc        '\n'
+19E*414  FFFB            aout
+               ; }
+               ; void h()
+19F*415  FA00            reba
+1A0*416  F000            ret 
+               ; =============== end of function f
+               ; =============== start of function h
+                         public      h
+               h:
+               ; {
+               ;    print("-8 = ");
+1A1*417  F900            esba
+1A2*418  136D            pc        @L50
+1A3*419  FFF7            sout
+               ;    println(x + z);
+1A4*420  0000            p         x
+1A5*421  0001            p         z
+1A6*422  F100            add 
+1A7*423  FFFD            dout
+1A8*424  100A            pc        '\n'
+1A9*425  FFFB            aout
+               ; }
+1AA*426  FA00            reba
+1AB*427  F000            ret 
+               ; =============== end of function h
+               
+                         extern      g
+               ;====================== ^-lines follow ======
+1AC*428  0053  @L0:      dw        "S1 test done"
+1AD*429  0031
+1AE*430  0020
+1AF*431  0074
+1B0*432  0065
+1B1*433  0073
+1B2*434  0074
+1B3*435  0020
+1B4*436  0064
+1B5*437  006F
+1B6*438  006E
+1B7*439  0065
+1B8*440  0000
+1B9*441  0053  @L1:      dw        "S5 test done"
+1BA*442  0035
+1BB*443  0020
+1BC*444  0074
+1BD*445  0065
+1BE*446  0073
+1BF*447  0074
+1C0*448  0020
+1C1*449  0064
+1C2*450  006F
+1C3*451  006E
+1C4*452  0065
+1C5*453  0000
+1C6*454  0032  @L2:      dw        "2 = "
+1C7*455  0020
+1C8*456  003D
+1C9*457  0020
+1CA*458  0000
+1CB*459  0053  @L3:      dw        "S2 test done"
+1CC*460  0032
+1CD*461  0020
+1CE*462  0074
+1CF*463  0065
+1D0*464  0073
+1D1*465  0074
+1D2*466  0020
+1D3*467  0064
+1D4*468  006F
+1D5*469  006E
+1D6*470  0065
+1D7*471  0000
+1D8*472  0066  @L4:      dw        "four lines follow"
+1D9*473  006F
+1DA*474  0075
+1DB*475  0072
+1DC*476  0020
+1DD*477  006C
+1DE*478  0069
+1DF*479  006E
+1E0*480  0065
+1E1*481  0073
+1E2*482  0020
+1E3*483  0066
+1E4*484  006F
+1E5*485  006C
+1E6*486  006C
+1E7*487  006F
+1E8*488  0077
+1E9*489  0000
+1EA*490  006F  @L5:      dw        "one line"
+1EB*491  006E
+1EC*492  0065
+1ED*493  0020
+1EE*494  006C
+1EF*495  0069
+1F0*496  006E
+1F1*497  0065
+1F2*498  0000
+1F3*499  006F  @L6:      dw        "one line"
+1F4*500  006E
+1F5*501  0065
+1F6*502  0020
+1F7*503  006C
+1F8*504  0069
+1F9*505  006E
+1FA*506  0065
+1FB*507  0000
+1FC*508  0074  @L7:      dw        "third line\nfourth line"
+1FD*509  0068
+1FE*510  0069
+1FF*511  0072
+200*512  0064
+201*513  0020
+202*514  006C
+203*515  0069
+204*516  006E
+205*517  0065
+206*518  000A
+207*519  0066
+208*520  006F
+209*521  0075
+20A*522  0072
+20B*523  0074
+20C*524  0068
+20D*525  0020
+20E*526  006C
+20F*527  0069
+210*528  006E
+211*529  0065
+212*530  0000
+213*531  0020  @L8:      dw        " = "
+214*532  003D
+215*533  0020
+216*534  0000
+217*535  0020  @L9:      dw        " = "
+218*536  003D
+219*537  0020
+21A*538  0000
+21B*539  0020  @L10:     dw        " = "
+21C*540  003D
+21D*541  0020
+21E*542  0000
+21F*543  002D  @L11:     dw        "-14 = "
+220*544  0031
+221*545  0034
+222*546  0020
+223*547  003D
+224*548  0020
+225*549  0000
+226*550  0020  @L12:     dw        " = "
+227*551  003D
+228*552  0020
+229*553  0000
+22A*554  002F  @L13:     dw        "////Enter integer////"
+22B*555  002F
+22C*556  002F
+22D*557  002F
+22E*558  0045
+22F*559  006E
+230*560  0074
+231*561  0065
+232*562  0072
+233*563  0020
+234*564  0069
+235*565  006E
+236*566  0074
+237*567  0065
+238*568  0067
+239*569  0065
+23A*570  0072
+23B*571  002F
+23C*572  002F
+23D*573  002F
+23E*574  002F
+23F*575  0000
+240*576  003D  @L14:     dw        "= "
+241*577  0020
+242*578  0000
+243*579  0053  @L15:     dw        "S3 test done"
+244*580  0033
+245*581  0020
+246*582  0074
+247*583  0065
+248*584  0073
+249*585  0074
+24A*586  0020
+24B*587  0064
+24C*588  006F
+24D*589  006E
+24E*590  0065
+24F*591  0000
+250*592  0032  @L16:     dw        "2 1 on separate lines"
+251*593  0020
+252*594  0031
+253*595  0020
+254*596  006F
+255*597  006E
+256*598  0020
+257*599  0073
+258*600  0065
+259*601  0070
+25A*602  0061
+25B*603  0072
+25C*604  0061
+25D*605  0074
+25E*606  0065
+25F*607  0020
+260*608  006C
+261*609  0069
+262*610  006E
+263*611  0065
+264*612  0073
+265*613  0000
+266*614  0062  @L23:     dw        "bug"
+267*615  0075
+268*616  0067
+269*617  0000
+26A*618  0068  @L24:     dw        "hello -3 up to hello -1\n"
+26B*619  0065
+26C*620  006C
+26D*621  006C
+26E*622  006F
+26F*623  0020
+270*624  002D
+271*625  0033
+272*626  0020
+273*627  0075
+274*628  0070
+275*629  0020
+276*630  0074
+277*631  006F
+278*632  0020
+279*633  0068
+27A*634  0065
+27B*635  006C
+27C*636  006C
+27D*637  006F
+27E*638  0020
+27F*639  002D
+280*640  0031
+281*641  000A
+282*642  0000
+283*643  0068  @L28:     dw        "hello "
+284*644  0065
+285*645  006C
+286*646  006C
+287*647  006F
+288*648  0020
+289*649  0000
+28A*650  0062  @L30:     dw        "bug1"
+28B*651  0075
+28C*652  0067
+28D*653  0031
+28E*654  0000
+28F*655  0062  @L31:     dw        "bye 2 down to bye 1\n"
+290*656  0079
+291*657  0065
+292*658  0020
+293*659  0032
+294*660  0020
+295*661  0064
+296*662  006F
+297*663  0077
+298*664  006E
+299*665  0020
+29A*666  0074
+29B*667  006F
+29C*668  0020
+29D*669  0062
+29E*670  0079
+29F*671  0065
+2A0*672  0020
+2A1*673  0031
+2A2*674  000A
+2A3*675  0000
+2A4*676  0062  @L33:     dw        "bye "
+2A5*677  0079
+2A6*678  0065
+2A7*679  0020
+2A8*680  0000
+2A9*681  004E  @L34:     dw        "Next line should say \"hello\" with the quo
+2AA*682  0065
+2AB*683  0078
+2AC*684  0074
+2AD*685  0020
+2AE*686  006C
+2AF*687  0069
+2B0*688  006E
+2B1*689  0065
+2B2*690  0020
+2B3*691  0073
+2B4*692  0068
+2B5*693  006F
+2B6*694  0075
+2B7*695  006C
+2B8*696  0064
+2B9*697  0020
+2BA*698  0073
+2BB*699  0061
+2BC*700  0079
+2BD*701  0020
+2BE*702  0022
+2BF*703  0068
+2C0*704  0065
+2C1*705  006C
+2C2*706  006C
+2C3*707  006F
+2C4*708  0022
+2C5*709  0020
+2C6*710  0077
+2C7*711  0069
+2C8*712  0074
+2C9*713  0068
+2CA*714  0020
+2CB*715  0074
+2CC*716  0068
+2CD*717  0065
+2CE*718  0020
+2CF*719  0071
+2D0*720  0075
+2D1*721  006F
+2D2*722  0074
+2D3*723  0065
+2D4*724  0073
+2D5*725  0000
+2D6*726  0022  @L38:     dw        "\"hel"
+2D7*727  0068
+2D8*728  0065
+2D9*729  006C
+2DA*730  0000
+2DB*731  006C  @L39:     dw        "lo\""
+2DC*732  006F
+2DD*733  0022
+2DE*734  0000
+2DF*735  0062  @L41:     dw        "bug3"
+2E0*736  0075
+2E1*737  0067
+2E2*738  0033
+2E3*739  0000
+2E4*740  0067  @L42:     dw        "good = "
+2E5*741  006F
+2E6*742  006F
+2E7*743  0064
+2E8*744  0020
+2E9*745  003D
+2EA*746  0020
+2EB*747  0000
+2EC*748  0062  @L44:     dw        "bug4"
+2ED*749  0075
+2EE*750  0067
+2EF*751  0034
+2F0*752  0000
+2F1*753  0067  @L46:     dw        "good"
+2F2*754  006F
+2F3*755  006F
+2F4*756  0064
+2F5*757  0000
+2F6*758  004E  @L47:     dw        "Next line should say \"bye\" without the qu
+2F7*759  0065
+2F8*760  0078
+2F9*761  0074
+2FA*762  0020
+2FB*763  006C
+2FC*764  0069
+2FD*765  006E
+2FE*766  0065
+2FF*767  0020
+300*768  0073
+301*769  0068
+302*770  006F
+303*771  0075
+304*772  006C
+305*773  0064
+306*774  0020
+307*775  0073
+308*776  0061
+309*777  0079
+30A*778  0020
+30B*779  0022
+30C*780  0062
+30D*781  0079
+30E*782  0065
+30F*783  0022
+310*784  0020
+311*785  0077
+312*786  0069
+313*787  0074
+314*788  0068
+315*789  006F
+316*790  0075
+317*791  0074
+318*792  0020
+319*793  0074
+31A*794  0068
+31B*795  0065
+31C*796  0020
+31D*797  0071
+31E*798  0075
+31F*799  006F
+320*800  0074
+321*801  0065
+322*802  0073
+323*803  000A
+324*804  0062
+325*805  0079
+326*806  0065
+327*807  0000
+328*808  0022  @L48:     dw        "\"3 backslashes and a double quote \\\\\\\"
+329*809  0033
+32A*810  0020
+32B*811  0062
+32C*812  0061
+32D*813  0063
+32E*814  006B
+32F*815  0073
+330*816  006C
+331*817  0061
+332*818  0073
+333*819  0068
+334*820  0065
+335*821  0073
+336*822  0020
+337*823  0061
+338*824  006E
+339*825  0064
+33A*826  0020
+33B*827  0061
+33C*828  0020
+33D*829  0064
+33E*830  006F
+33F*831  0075
+340*832  0062
+341*833  006C
+342*834  0065
+343*835  0020
+344*836  0071
+345*837  0075
+346*838  006F
+347*839  0074
+348*840  0065
+349*841  0020
+34A*842  005C
+34B*843  005C
+34C*844  005C
+34D*845  0022
+34E*846  0020
+34F*847  0077
+350*848  0069
+351*849  0074
+352*850  0068
+353*851  0069
+354*852  006E
+355*853  0020
+356*854  0061
+357*855  0020
+358*856  0073
+359*857  0074
+35A*858  0072
+35B*859  0069
+35C*860  006E
+35D*861  0067
+35E*862  0022
+35F*863  0000
+360*864  0053  @L49:     dw        "S4 test done"
+361*865  0034
+362*866  0020
+363*867  0074
+364*868  0065
+365*869  0073
+366*870  0074
+367*871  0020
+368*872  0064
+369*873  006F
+36A*874  006E
+36B*875  0065
+36C*876  0000
+36D*877  002D  @L50:     dw        "-8 = "
+36E*878  0038
+36F*879  0020
+370*880  003D
+371*881  0020
+372*882  0000
+373*883  ========= end of S5a.a ============================
+
+asm in  = S5a.a
+asm out = S5a.o
+asm lst = S5a.lst 

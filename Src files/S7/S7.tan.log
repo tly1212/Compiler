@@ -1,0 +1,42 @@
+e Version 1.7
+Log file S7.tan.log
+
+Your name:          tan liangyu 
+Machinecode file:   S7.e        
+
+=================== Fri Apr 28 13:39:47 2017 ==============r
+===Basic array test===
+3
+5001
+201
+31
+21
+===Global array test===
+printing garr:
+3
+20
+30
+40
+Bounds checking:
+g1 -10 = -10
+g2 -50 = -50
+Out of bounds test:
+-10
+-50
+===For loop test===
+loop 1
+loop 2
+loop 3
+loop 4
+===Formatting print test===
+The result of 10 + 20 = 30
+
+===========================================================r
+
+Report for:         tan liangyu 
+Program output:     not tested
+Machine code size:  587   
+Machine inst count: 530   
+Execution time:     6581  
+
+================ r(4f42) terminated Fri Apr 28 13:39:47 2017

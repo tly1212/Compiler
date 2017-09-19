@@ -1,0 +1,562 @@
+a Assembler Version 1.7    Fri Apr 28 13:39:45 2017
+
+  LOC   MACHINE      ASSEMBLY
+hex*dec  CODE          CODE
+
+               ; from S7 compiler written by ...
+               ; Jackson Maddox
+               ; Liangyu Tan
+               ; Johirul Islam
+               ; int g1 = -10;
+                         public      g1
+0  *0    FFF6  g1:       dw        -10
+               ; int garr[3];
+                         public      garr
+1  *1    0003  garr:     dw        "\0\0"
+2  *2    0000
+3  *3    0000
+4  *4    0000
+               ; int g2 = -50;
+                         public      g2
+5  *5    FFCE  g2:       dw        -50
+               ; 
+               ; int x = 10;
+                         public      x
+6  *6    000A  x:        dw        10
+               ; int y = 20;
+                         public      y
+7  *7    0014  y:        dw        20
+               ; int z;
+                         public      z
+8  *8    0000  z:        dw        0
+               ; 
+               ; void main() {
+               ; =============== start of function main
+                         public      main
+               main:
+               ; 	println("===Basic array test===");
+9  *9    F900            esba
+A  *10   10EE            pc        @L0
+B  *11   FFF7            sout
+C  *12   100A            pc        '\n'
+D  *13   FFFB            aout
+               ; 	basicArrayTest();
+E  *14   5022            call      basicArrayTest
+               ; 	println("===Global array test===");
+F  *15   1105            pc        @L1
+10 *16   FFF7            sout
+11 *17   100A            pc        '\n'
+12 *18   FFFB            aout
+               ; 	globalArrayTest();
+13 *19   5068            call      globalArrayTest
+               ; 	println("===For loop test===");
+14 *20   111D            pc        @L2
+15 *21   FFF7            sout
+16 *22   100A            pc        '\n'
+17 *23   FFFB            aout
+               ; 	forLoopTest();
+18 *24   50B8            call      forLoopTest
+               ; 	println("===Formatting print test===");
+19 *25   1131            pc        @L3
+1A *26   FFF7            sout
+1B *27   100A            pc        '\n'
+1C *28   FFFB            aout
+               ; 	formattedPrintTest();
+1D *29   50CC            call      formattedPrintTest
+               ; 	println();
+1E *30   100A            pc        '\n'
+1F *31   FFFB            aout
+               ; }
+               ; 
+               ; void basicArrayTest() {
+20 *32   FA00            reba
+21 *33   F000            ret 
+               ; =============== end of function main
+               ; =============== start of function basicArrayTest
+                         public      basicArrayTest
+               basicArrayTest:
+               ; 	int i;
+22 *34   F900            esba
+23 *35   4FFF            asp       -1
+               ; 	int a[5];
+24 *36   4FFA            asp       -6
+25 *37   3FFE            cora      -2
+26 *38   00E8            p         @5
+27 *39   F300            stav
+               ; 	int x = 5;
+28 *40   00E8            p         @5
+               ; 
+               ; 	a[1] = 20;
+29 *41   3FFE            cora      -2
+2A *42   00E3            p         @1
+2B *43   F200            sub 
+2C *44   00EC            p         @20
+               ; 	a[2] = 30;
+2D *45   F300            stav
+2E *46   3FFE            cora      -2
+2F *47   00E4            p         @2
+30 *48   F200            sub 
+31 *49   00EB            p         @30
+               ; 	a[3] = 200;
+32 *50   F300            stav
+33 *51   3FFE            cora      -2
+34 *52   00E6            p         @3
+35 *53   F200            sub 
+36 *54   00ED            p         @200
+               ; 	a[4] = 5000;
+37 *55   F300            stav
+38 *56   3FFE            cora      -2
+39 *57   00E7            p         @4
+3A *58   F200            sub 
+3B *59   00E9            p         @5000
+               ; 	a[5] = 2;
+3C *60   F300            stav
+3D *61   3FFE            cora      -2
+3E *62   00E8            p         @5
+3F *63   F200            sub 
+40 *64   00E4            p         @2
+               ; 
+               ; 	i = 1;
+41 *65   F300            stav
+42 *66   3FFF            cora      -1
+43 *67   00E3            p         @1
+               ; 	x = a[0]; // x is size of array
+44 *68   F300            stav
+45 *69   3FF8            cora      -8
+46 *70   3FFE            cora      -2
+47 *71   00E2            p         @0
+48 *72   F200            sub 
+49 *73   F500            load
+               ; 	while (x > 0) {
+4A *74   F300            stav
+               @L4:
+4B *75   2FF8            pr        -8
+4C *76   00E2            p         @0
+4D *77   FC01            cmps      1
+4E *78   A066            jz        @L5
+               ; 		a[x] = a[x] + 1;
+4F *79   3FFE            cora      -2
+50 *80   2FF8            pr        -8
+51 *81   F200            sub 
+52 *82   3FFE            cora      -2
+53 *83   2FF8            pr        -8
+54 *84   F200            sub 
+55 *85   F500            load
+56 *86   00E3            p         @1
+57 *87   F100            add 
+               ; 		println(a[x]);
+58 *88   F300            stav
+59 *89   3FFE            cora      -2
+5A *90   2FF8            pr        -8
+5B *91   F200            sub 
+5C *92   F500            load
+5D *93   FFFD            dout
+5E *94   100A            pc        '\n'
+5F *95   FFFB            aout
+               ; 		x = x - 1;
+60 *96   3FF8            cora      -8
+61 *97   2FF8            pr        -8
+62 *98   00E3            p         @1
+63 *99   F200            sub 
+               ; 	}
+64 *100  F300            stav
+               ; }
+65 *101  604B            ja        @L4
+               @L5:
+               ; 
+               ; void globalArrayTest() {
+66 *102  FA00            reba
+67 *103  F000            ret 
+               ; =============== end of function basicArrayTest
+               ; =============== start of function globalArrayTest
+                         public      globalArrayTest
+               globalArrayTest:
+               ; 	int i;
+68 *104  F900            esba
+69 *105  4FFF            asp       -1
+               ; 	garr[1] = 20;
+6A *106  1001            pc        garr
+6B *107  00E3            p         @1
+6C *108  F100            add 
+6D *109  00EC            p         @20
+               ; 	garr[2] = 30;
+6E *110  F300            stav
+6F *111  1001            pc        garr
+70 *112  00E4            p         @2
+71 *113  F100            add 
+72 *114  00EB            p         @30
+               ; 	garr[3] = 40;
+73 *115  F300            stav
+74 *116  1001            pc        garr
+75 *117  00E6            p         @3
+76 *118  F100            add 
+77 *119  00EA            p         @40
+               ; 
+               ; 	println("printing garr:");
+78 *120  F300            stav
+79 *121  114D            pc        @L6
+7A *122  FFF7            sout
+7B *123  100A            pc        '\n'
+7C *124  FFFB            aout
+               ; 	i = 0;
+7D *125  3FFF            cora      -1
+7E *126  00E2            p         @0
+               ; 	while (i <= garr[0]) {
+7F *127  F300            stav
+               @L7:
+80 *128  2FFF            pr        -1
+81 *129  1001            pc        garr
+82 *130  00E2            p         @0
+83 *131  F100            add 
+84 *132  F500            load
+85 *133  FC06            cmps      6
+86 *134  A094            jz        @L8
+               ; 		println(garr[i]);
+87 *135  1001            pc        garr
+88 *136  2FFF            pr        -1
+89 *137  F100            add 
+8A *138  F500            load
+8B *139  FFFD            dout
+8C *140  100A            pc        '\n'
+8D *141  FFFB            aout
+               ; 		i = i + 1;
+8E *142  3FFF            cora      -1
+8F *143  2FFF            pr        -1
+90 *144  00E3            p         @1
+91 *145  F100            add 
+               ; 	}
+92 *146  F300            stav
+               ; 
+               ; 	println("Bounds checking:");
+93 *147  6080            ja        @L7
+               @L8:
+94 *148  115C            pc        @L9
+95 *149  FFF7            sout
+96 *150  100A            pc        '\n'
+97 *151  FFFB            aout
+               ; 	print("g1 -10 = ");
+98 *152  116D            pc        @L10
+99 *153  FFF7            sout
+               ; 	println(g1);
+9A *154  0000            p         g1
+9B *155  FFFD            dout
+9C *156  100A            pc        '\n'
+9D *157  FFFB            aout
+               ; 
+               ; 	print("g2 -50 = ");
+9E *158  1177            pc        @L11
+9F *159  FFF7            sout
+               ; 	println(g2);
+A0 *160  0005            p         g2
+A1 *161  FFFD            dout
+A2 *162  100A            pc        '\n'
+A3 *163  FFFB            aout
+               ; 
+               ; 	println("Out of bounds test:");
+A4 *164  1181            pc        @L12
+A5 *165  FFF7            sout
+A6 *166  100A            pc        '\n'
+A7 *167  FFFB            aout
+               ; 	println(garr[-1]);
+A8 *168  1001            pc        garr
+A9 *169  00E5            p         @_1
+AA *170  F100            add 
+AB *171  F500            load
+AC *172  FFFD            dout
+AD *173  100A            pc        '\n'
+AE *174  FFFB            aout
+               ; 	println(garr[4]);
+AF *175  1001            pc        garr
+B0 *176  00E7            p         @4
+B1 *177  F100            add 
+B2 *178  F500            load
+B3 *179  FFFD            dout
+B4 *180  100A            pc        '\n'
+B5 *181  FFFB            aout
+               ; }
+               ; 
+               ; void forLoopTest()
+B6 *182  FA00            reba
+B7 *183  F000            ret 
+               ; =============== end of function globalArrayTest
+               ; =============== start of function forLoopTest
+                         public      forLoopTest
+               forLoopTest:
+               ; {
+               ; 	for(int i = 0; i <= 3; i = i + 1){
+B8 *184  F900            esba
+B9 *185  00E2            p         @0
+               @L13:
+BA *186  2FFF            pr        -1
+BB *187  00E6            p         @3
+BC *188  FC06            cmps      6
+BD *189  A0CA            jz        @L14
+BE *190  3FFF            cora      -1
+BF *191  2FFF            pr        -1
+C0 *192  00E3            p         @1
+C1 *193  F100            add 
+C2 *194  F300            stav
+               ; 		//if(i == 2) break;
+               ; 		print("loop ");
+C3 *195  1195            pc        @L15
+C4 *196  FFF7            sout
+               ; 		println(i);
+C5 *197  2FFF            pr        -1
+C6 *198  FFFD            dout
+C7 *199  100A            pc        '\n'
+C8 *200  FFFB            aout
+               ; 	}
+               ; }
+C9 *201  60BA            ja        @L13
+               @L14:
+               ; 
+               ; void formattedPrintTest()
+CA *202  FA00            reba
+CB *203  F000            ret 
+               ; =============== end of function forLoopTest
+               ; =============== start of function formattedPrintTest
+                         public      formattedPrintTest
+               formattedPrintTest:
+               ; {
+               ; 	z = x+y;
+CC *204  F900            esba
+CD *205  1008            pc        z
+CE *206  0006            p         x
+CF *207  0007            p         y
+D0 *208  F100            add 
+               ;    print("The result of {0} + {1} = {2}",x,y,z);
+D1 *209  F300            stav
+D2 *210  119B            pc        @LL15
+D3 *211  FFF7            sout
+D4 *212  0006            p         x
+D5 *213  FFFD            dout
+D6 *214  11AA            pc        @LL21
+D7 *215  FFF7            sout
+D8 *216  0007            p         y
+D9 *217  FFFD            dout
+DA *218  11AE            pc        @LL27
+DB *219  FFF7            sout
+DC *220  0008            p         z
+DD *221  FFFD            dout
+DE *222  11B2            pc        @L16
+DF *223  FFF7            sout
+               ; }
+E0 *224  FA00            reba
+E1 *225  F000            ret 
+               ; =============== end of function formattedPrintTest
+               
+E2 *226  0000  @0:       dw        0
+E3 *227  0001  @1:       dw        1
+E4 *228  0002  @2:       dw        2
+E5 *229  FFFF  @_1:      dw        -1
+E6 *230  0003  @3:       dw        3
+E7 *231  0004  @4:       dw        4
+E8 *232  0005  @5:       dw        5
+E9 *233  1388  @5000:    dw        5000
+EA *234  0028  @40:      dw        40
+EB *235  001E  @30:      dw        30
+EC *236  0014  @20:      dw        20
+ED *237  00C8  @200:     dw        200
+               ;====================== ^-lines follow ======
+EE *238  003D  @L0:      dw        "===Basic array test==="
+EF *239  003D
+F0 *240  003D
+F1 *241  0042
+F2 *242  0061
+F3 *243  0073
+F4 *244  0069
+F5 *245  0063
+F6 *246  0020
+F7 *247  0061
+F8 *248  0072
+F9 *249  0072
+FA *250  0061
+FB *251  0079
+FC *252  0020
+FD *253  0074
+FE *254  0065
+FF *255  0073
+100*256  0074
+101*257  003D
+102*258  003D
+103*259  003D
+104*260  0000
+105*261  003D  @L1:      dw        "===Global array test==="
+106*262  003D
+107*263  003D
+108*264  0047
+109*265  006C
+10A*266  006F
+10B*267  0062
+10C*268  0061
+10D*269  006C
+10E*270  0020
+10F*271  0061
+110*272  0072
+111*273  0072
+112*274  0061
+113*275  0079
+114*276  0020
+115*277  0074
+116*278  0065
+117*279  0073
+118*280  0074
+119*281  003D
+11A*282  003D
+11B*283  003D
+11C*284  0000
+11D*285  003D  @L2:      dw        "===For loop test==="
+11E*286  003D
+11F*287  003D
+120*288  0046
+121*289  006F
+122*290  0072
+123*291  0020
+124*292  006C
+125*293  006F
+126*294  006F
+127*295  0070
+128*296  0020
+129*297  0074
+12A*298  0065
+12B*299  0073
+12C*300  0074
+12D*301  003D
+12E*302  003D
+12F*303  003D
+130*304  0000
+131*305  003D  @L3:      dw        "===Formatting print test==="
+132*306  003D
+133*307  003D
+134*308  0046
+135*309  006F
+136*310  0072
+137*311  006D
+138*312  0061
+139*313  0074
+13A*314  0074
+13B*315  0069
+13C*316  006E
+13D*317  0067
+13E*318  0020
+13F*319  0070
+140*320  0072
+141*321  0069
+142*322  006E
+143*323  0074
+144*324  0020
+145*325  0074
+146*326  0065
+147*327  0073
+148*328  0074
+149*329  003D
+14A*330  003D
+14B*331  003D
+14C*332  0000
+14D*333  0070  @L6:      dw        "printing garr:"
+14E*334  0072
+14F*335  0069
+150*336  006E
+151*337  0074
+152*338  0069
+153*339  006E
+154*340  0067
+155*341  0020
+156*342  0067
+157*343  0061
+158*344  0072
+159*345  0072
+15A*346  003A
+15B*347  0000
+15C*348  0042  @L9:      dw        "Bounds checking:"
+15D*349  006F
+15E*350  0075
+15F*351  006E
+160*352  0064
+161*353  0073
+162*354  0020
+163*355  0063
+164*356  0068
+165*357  0065
+166*358  0063
+167*359  006B
+168*360  0069
+169*361  006E
+16A*362  0067
+16B*363  003A
+16C*364  0000
+16D*365  0067  @L10:     dw        "g1 -10 = "
+16E*366  0031
+16F*367  0020
+170*368  002D
+171*369  0031
+172*370  0030
+173*371  0020
+174*372  003D
+175*373  0020
+176*374  0000
+177*375  0067  @L11:     dw        "g2 -50 = "
+178*376  0032
+179*377  0020
+17A*378  002D
+17B*379  0035
+17C*380  0030
+17D*381  0020
+17E*382  003D
+17F*383  0020
+180*384  0000
+181*385  004F  @L12:     dw        "Out of bounds test:"
+182*386  0075
+183*387  0074
+184*388  0020
+185*389  006F
+186*390  0066
+187*391  0020
+188*392  0062
+189*393  006F
+18A*394  0075
+18B*395  006E
+18C*396  0064
+18D*397  0073
+18E*398  0020
+18F*399  0074
+190*400  0065
+191*401  0073
+192*402  0074
+193*403  003A
+194*404  0000
+195*405  006C  @L15:     dw        "loop "
+196*406  006F
+197*407  006F
+198*408  0070
+199*409  0020
+19A*410  0000
+19B*411  0054  @LL15:    dw        "The result of "
+19C*412  0068
+19D*413  0065
+19E*414  0020
+19F*415  0072
+1A0*416  0065
+1A1*417  0073
+1A2*418  0075
+1A3*419  006C
+1A4*420  0074
+1A5*421  0020
+1A6*422  006F
+1A7*423  0066
+1A8*424  0020
+1A9*425  0000
+1AA*426  0020  @LL21:    dw        " + "
+1AB*427  002B
+1AC*428  0020
+1AD*429  0000
+1AE*430  0020  @LL27:    dw        " = "
+1AF*431  003D
+1B0*432  0020
+1B1*433  0000
+1B2*434  0000  @L16:     dw        ""
+1B3*435  ========= end of S7.a =============================
+
+asm in  = S7.a
+asm out = S7.o
+asm lst = S7.lst 

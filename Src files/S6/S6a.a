@@ -1,0 +1,58 @@
+; from S6 compiler written by ...
+; Jackson Maddox
+; Liangyu Tan
+; Johirul Islam
+; void main()
+; =============== start of function main
+          public      main
+main:
+; {
+;    t();
+          esba
+          call      t
+; }
+; void t()
+          reba
+          ret 
+; =============== end of function main
+; =============== start of function t
+          public      t
+t:
+; {
+; 	for(int i = 0; i < 3; i = i + 1){
+          esba
+@L0:
+          public      i
+i:        dw        0
+          p         i
+          p         @3
+          cmps      4
+          pc        i
+          p         i
+          p         @1
+          add 
+          stav
+          jz        @L1
+; 		//if(i == 2) break;
+; 		print("loop ");
+          pc        @L2
+          sout
+^@L2:     dw        "loop "
+; 		println(i);
+          p         i
+          dout
+          pc        '\n'
+          aout
+; 	}
+; }
+          ja        @L0
+@L1:
+; 
+; 
+; 
+          reba
+          ret 
+; =============== end of function t
+
+@1:       dw        1
+@3:       dw        3

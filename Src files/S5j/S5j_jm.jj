@@ -1,0 +1,864 @@
+// S5j.jj JavaCC input file for S5j compiler
+options
+{
+  STATIC = false;         // generate non-static methods
+
+  // set to true to debug token manager
+  COMMON_TOKEN_ACTION = false;
+
+  // pass parser reference to the token manager
+  TOKEN_MANAGER_USES_PARSER = true;
+}                                // end of options block
+//======================================================
+PARSER_BEGIN(S5j)
+import java.io.*;
+import java.util.ArrayList;
+class S5j
+{
+  static final int LOCALVARIABLE = 1;
+  static final int GLOBALVARIABLE = 2;
+  static final int EXTERNVARIABLE = 3;
+  static final int FUNCTIONDEFINITION = 4;
+  static final int FUNCTIONCALL = 5;
+
+  private PrintWriter outFile;
+  private S5jSymTab st;
+  private S5jCodeGen cg;
+  //-----------------------------------------
+  public static void main(String[] args) throws
+                                             IOException
+  {
+    System.out.println("S5j compiler written by ...");
+    System.out.println("Jackson Maddox");
+    System.out.println("Liangyu Tan");
+    System.out.println("Johirul Islam");
+
+    if (args.length != 1)
+    {
+      System.err.println("Wrong number cmd line args");
+      System.exit(1);
+    }
+
+    // build input and output file names
+    String inFileName = args[0] + ".s";
+    String outFileName = args[0] + ".a";
+
+    // construct file objects
+    FileInputStream inFile =
+                       new FileInputStream(inFileName);
+    PrintWriter outFile = new PrintWriter(outFileName);
+
+    // identify compiler/author in output file
+    outFile.println("; from S5j compiler written by ...");
+    outFile.println("; Jackson Maddox");
+    outFile.println("; Liangyu Tan");
+    outFile.println("; Johirul Islam");
+
+    // construct objects that make up compiler
+    S5jSymTab st = new S5jSymTab();
+    S5jCodeGen cg = new S5jCodeGen(outFile, st);
+    S5j parser = new S5j(inFile);
+
+    // initialize parser's instance variables
+    parser.outFile = outFile;
+    parser.st = st;
+    parser.cg = cg;
+
+    try
+    {
+      parser.program();
+    }
+    catch(ParseException e)
+    {
+      System.err.println(e.getMessage());
+      outFile.println(e.getMessage());
+      outFile.close();
+      System.exit(1);
+    }
+
+    outFile.close();
+  }
+  //-----------------------------------------
+  // If COMMON_TOKEN_ACTION is true, the token manager
+  // calls makeComment for each token to create the
+  // token trace.
+  //
+  public void makeComment(Token t)
+  {
+    outFile.printf(
+      "; kd=%3d bL=%3d bC=%3d eL=%3d eC=%3d im= %s%n",
+       t.kind, t.beginLine, t.beginColumn, t.endLine,
+       t.endColumn, t.image);
+  }
+
+  public void makeComment(String s)
+  {
+    outFile.println("; " + s);
+  }
+
+  public void makeComment(Token t1, Token t2)
+  {
+    outFile.print(";");
+    while(t1 != t2) {
+      outFile.print(t1.image + " ");
+      t1 = t1.next;
+    }
+    outFile.println();
+  }
+
+  private RuntimeException genEx(String errorMessage)
+  {
+    Token currentToken = getToken(1);
+    return new RuntimeException("Encountered \"" +
+      currentToken.image + "\" on line " +
+      currentToken.beginLine + ", column " +
+      currentToken.beginColumn + "." +
+      System.getProperty("line.separator") +
+      errorMessage);
+  }
+}                                          // end of S5j
+//======================================================
+class S5jSymTab
+{
+  private ArrayList<String> symbol;
+  private ArrayList<Integer> relAdd;
+  private ArrayList<Integer> category;
+  //-----------------------------------------
+  public S5jSymTab()
+  {
+    symbol = new ArrayList<String>();
+    relAdd = new ArrayList<Integer>();
+    category = new ArrayList<Integer>();
+  }
+  //-----------------------------------------
+  public void enter(String s, int ra, int cat)
+  {
+    int index = symbol.indexOf(s);
+
+    // if s is not in symbol, then add it
+    if (index < 0) {
+      symbol.add(s);
+      relAdd.add(ra);
+      category.add(cat);
+    } else {
+      int currCat = category.get(index);
+      if (cat == S5j.FUNCTIONCALL
+        && (currCat == S5j.FUNCTIONCALL || currCat == S5j.FUNCTIONDEFINITION)) {
+
+        ; // do nothing
+
+      } else if (cat == S5j.FUNCTIONDEFINITION && currCat == S5j.FUNCTIONCALL) {
+
+        category.set(index, S5j.FUNCTIONDEFINITION);
+
+      } else if (cat == S5j.LOCALVARIABLE
+        && (currCat == S5j.GLOBALVARIABLE || currCat == S5j.EXTERNVARIABLE)) {
+
+        symbol.add(s);
+        relAdd.add(ra);
+        category.add(cat);
+
+      } else {
+        throw new RuntimeException("For symbol " + s +
+          " got cat " + cat + " while having cat " + currCat);
+      }
+    }
+  }
+  //-----------------------------------------
+  public int find(String sym)
+  {
+    for (int i = symbol.size() - 1; i >= 0; i--) {
+      if (symbol.get(i).equals(sym)) return i;
+    }
+    throw new RuntimeException("No such symbol " + sym);
+  }
+  //-----------------------------------------
+  public String getSymbol(int i)
+  {
+    return symbol.get(i);
+  }
+  //-----------------------------------------
+  public Integer getRelAdd(int index)
+  {
+    return relAdd.get(index);
+  }
+  //-----------------------------------------
+  public Integer getCategory(int index)
+  {
+    return category.get(index);
+  }
+  //-----------------------------------------
+  public int getSize()
+  {
+    return symbol.size();
+  }
+  //-----------------------------------------
+  public void localRemove()
+  {
+    // Inefficient, but should work
+    boolean foundLocal = true;
+    while (foundLocal) {
+      foundLocal = false;
+
+      for (int i = 0; i < symbol.size(); i++) {
+        if (category.get(i) != S5j.LOCALVARIABLE) continue;
+        symbol.remove(i);
+        relAdd.remove(i);
+        category.remove(i);
+        foundLocal = true;
+      }
+    }
+  }
+}                                    // end of S5jSymTab
+//======================================================
+class S5jCodeGen
+{
+  private PrintWriter outFile;
+  private S5jSymTab st;
+  private int labelNumber;
+  //-----------------------------------------
+  public S5jCodeGen(PrintWriter outFile, S5jSymTab st)
+  {
+    this.outFile = outFile;
+    this.st = st;
+  }
+  //-----------------------------------------
+  public String getLabel()
+  {
+    return "@L" + labelNumber++;
+  }
+  //-----------------------------------------
+  public void emitLabel(String label)
+  {
+    outFile.printf("%s%n", label + ":");
+  }
+  //-----------------------------------------
+  public void emitInstruction(String op)
+  {
+    outFile.printf("          %-4s%n", op);
+  }
+  //-----------------------------------------
+  public void emitInstruction(String op, String opnd)
+  {
+    outFile.printf(
+                  "          %-4s      %s%n", op, opnd);
+  }
+  //-----------------------------------------
+  public void emitdw(String label, String value)
+  {
+    outFile.printf(
+             "%-9s dw        %s%n", label + ":", value);
+  }
+  //-----------------------------------------
+  public void emitString(String line)
+  {
+    outFile.printf("%s%n", line);
+  }
+  //-----------------------------------------
+  public void push(int p)
+  {
+    int cat = st.getCategory(p);
+    if (cat == S5j.LOCALVARIABLE)
+      emitInstruction("pr", Integer.toString(st.getRelAdd(p)));
+    else
+      emitInstruction("p", st.getSymbol(p));
+  }
+  //-----------------------------------------
+  public void pushAddress(int p)
+  {
+    int cat = st.getCategory(p);
+    if (cat == S5j.LOCALVARIABLE)
+      emitInstruction("cora", Integer.toString(st.getRelAdd(p)));
+    else
+      emitInstruction("pc", st.getSymbol(p));
+  }
+  //-----------------------------------------
+  public void endCode()
+  {
+    outFile.println();
+
+    // emit extern for each FUNCTIONCALL in the symbol table
+    int size = st.getSize();
+    // emit dw for each symbol in the symbol table
+    for (int i=0; i < size; i++)
+      if (st.getCategory(i) == S5j.FUNCTIONCALL)
+        emitInstruction("extern", st.getSymbol(i));
+  }
+}                             // end of S5jCodeGen class
+PARSER_END(S5j)
+
+// Specification of the S5j token manager ==============
+
+TOKEN_MGR_DECLS:
+{
+  // called for each token returned to parser
+  void CommonTokenAction(Token t)
+  {
+    parser.makeComment(t);
+  }
+}
+//------------------------------
+SKIP:  // these tokens are not returned to parser
+{
+   " "
+ |
+   "\n"
+ |
+   "\r"
+ |
+   "\t"
+ |
+   <"//" (~["\n","\r"])*>
+}
+//------------------------------
+MORE:
+{
+   "\"": IN_STRING  // matches initial string quote
+}
+//------------------------------
+TOKEN:  // these tokens are returned to parser
+{
+   <WHILE: "while">
+ |
+   <EXTERN: "extern">
+ |
+   <INT: "int">
+ |
+   <VOID: "void">
+ |
+   <IF: "if">
+ |
+   <DO: "do">
+ |
+   <ELSE: "else">
+ |
+   <READINT: "readint">
+ |
+   <PRINT: "print">
+ |
+   <PRINTLN: "println">  // must precede <ID>
+ |
+   <UNSIGNED: (["0"-"9"])+>
+ |
+   <ID: ["A"-"Z","a"-"z"] (["A"-"Z","a"-"z","0"-"9"])*>
+ |
+   <ASSIGN: "=">
+ |
+   <SEMICOLON: ";">
+ |
+   <COMMA: ",">
+ |
+   <LEFTPAREN: "(">
+ |
+   <RIGHTPAREN: ")">
+ |
+   <PLUS: "+">
+ |
+   <MINUS: "-">
+ |
+   <TIMES: "*">
+ |
+   <FORWARDSLASH: "/">
+ |
+   <LEFTBRACE: "{">
+ |
+   <RIGHTBRACE: "}">
+}
+//------------------------------
+<IN_STRING>
+MORE:
+{
+   "\\\""    // matches backslack quote
+  |
+   "\\\\"    // matches backslash backslash
+  |
+   "\\\r\n"  // matches backslash \r \n
+  |
+   "\\\n"    // matches backslash \n
+  |
+   "\\\r"    // matches backslash \r
+  |
+   <~["\"", "\n", "\r"]>  // everything else except ", \n, and \r
+}
+//------------------------------
+<IN_STRING>
+TOKEN:
+{
+   <STRING: "\"">  // matches terminating quote
+   {
+     matchedToken.image = matchedToken.image.replace("\\\r\n", "");
+     matchedToken.image = matchedToken.image.replace("\\\n", "");
+     matchedToken.image = matchedToken.image.replace("\\\r", "");
+   } : DEFAULT
+}
+//------------------------------
+<*>
+TOKEN:
+{
+   <ERROR: ~[]>  // matches any single character
+}
+
+// Translation grammar for S3
+
+void program(): {}
+{
+   programUnitList()
+   {cg.endCode();}
+   <EOF>
+}
+//------------------------------
+void programUnitList(): {}
+{
+   {if (getToken(1).kind == EOF) return;}
+   programUnit()
+   programUnitList()
+}
+//------------------------------
+void programUnit(): {}
+{
+   externDeclaration()
+ |
+   globalDeclaration()
+ |
+   functionDefinition()
+}
+//------------------------------
+void externDeclaration(): {Token t;}
+{
+   "extern"
+   "int"
+   t=<ID>
+   {st.enter(t.image, 0, EXTERNVARIABLE);}
+   {cg.emitInstruction("extern", t.image);}
+   (
+      ","
+      t=<ID>
+      {st.enter(t.image, 0, EXTERNVARIABLE);}
+      {cg.emitInstruction("extern", t.image);}
+   )*
+   ";"
+}
+//------------------------------
+void globalDeclaration(): {}
+{
+   "int"
+   global()            // process one global variable
+   (
+      ","
+      global()         // process one global variable
+   )*
+   ";"
+}
+//------------------------------
+void global(): {Token t1, t2; String initVal;}
+{
+   t1=<ID>
+   {cg.emitInstruction("public", t1.image);}
+   {initVal="0";}
+   (                // do if global variable initialized
+      "="
+      {initVal = "";}
+      (<PLUS> | <MINUS> {initVal = "-";})?
+      t2=<UNSIGNED>
+      {initVal = initVal + t2.image;}
+   )?
+   {st.enter(t1.image, 0, GLOBALVARIABLE);}
+   {cg.emitdw(t1.image, initVal);}
+}
+//------------------------------
+void functionDefinition(): {Token t;}
+{
+   "void"
+   t=<ID>
+   {cg.emitString(
+      "; =============== start of function " + t.image);}
+   {st.enter(t.image, 0, FUNCTIONDEFINITION);}
+   {cg.emitInstruction("public", t.image);}
+   {cg.emitLabel(t.image);}
+   "("
+   (parameterList())?
+   ")"
+   "{"
+   {cg.emitInstruction("esba");}
+   localDeclarations()
+   statementList()
+   "}"
+   {cg.emitInstruction("reba");}
+   {cg.emitInstruction("ret");}
+   {cg.emitString(
+      "; =============== end of function " + t.image);}
+   // remove locals from symbol table
+   {st.localRemove();}
+}
+//------------------------------
+void parameterList(): {Token t; int p;}
+{
+   t=parameter()
+   p=parameterR()
+   {st.enter(t.image, p, LOCALVARIABLE);}
+}
+//------------------------------
+Token parameter(): {Token t;}
+{
+   "int"
+   t=<ID>
+   {return t;}
+}
+//------------------------------
+int parameterR(): {Token t; int p;}
+{
+   ","
+   t = parameter()
+   p = parameterR()      // p is the rel address
+   {st.enter(t.image, p, LOCALVARIABLE);}
+   {return p + 1;}       // return next relative address
+ |
+   {return 2;}           // at end of parameter list
+}
+//------------------------------
+void localDeclarations(): {int relativeAddress = -1;}
+{
+   (
+      "int"
+      local(relativeAddress--)    // process 1 local var
+      (
+         ","
+         local(relativeAddress--) // process 1 local var
+      )*
+      ";"
+   )*
+}
+//------------------------------
+void local(int relativeAddress): {Token t; String sign;}
+{
+   t=<ID>
+   {st.enter(t.image, relativeAddress, LOCALVARIABLE);}
+   (
+      (              // do if local variable initialized
+         "="
+         {sign = "";}
+         (<PLUS> | <MINUS> {sign = "-"; })?
+         t=<UNSIGNED>
+         {cg.emitInstruction("pwc", sign + t.image);}
+      )
+     |
+      {cg.emitInstruction("asp", "-1");}
+   )
+}
+//------------------------------
+void statementList(): {}
+{
+   { if (getToken(1).kind == RIGHTBRACE) return; }
+   statement()
+   statementList()
+}
+//------------------------------
+void statement(): {Token t; boolean outComment;}
+{
+   {t = getToken(1); outComment = true;}
+   try
+   {
+     (
+       LOOKAHEAD(2)
+       assignmentStatement()  // starts with <ID>
+     |
+       functionCall()  // also starts with <ID>
+     |
+       printlnStatement()
+     |
+       printStatement()
+     |
+       nullStatement()
+     |
+       compoundStatement()
+       {outComment = false;}
+     |
+       readintStatement()
+     |
+       whileStatement()
+     |
+       ifStatement()
+     |
+       doWhileStatement()
+     )
+     {if (outComment) makeComment(t, getToken(1));}
+   }
+   catch (ParseException e)
+   {
+     System.err.println(e.getMessage());
+     cg.emitString(e.getMessage());
+
+     while (getToken(1).kind != SEMICOLON && getToken(1).kind != EOF)
+       getNextToken();
+     if (getToken(1).kind != EOF)
+       getNextToken();
+   }
+}
+//------------------------------
+void assignmentStatement(): {Token t; int index;}
+{
+   t=<ID>
+   {index=st.find(t.image);}
+   {cg.pushAddress(index);}
+   "="
+   assignmentTail()
+   {cg.emitInstruction("stav");}
+}
+//------------------------------
+void assignmentTail(): {Token t; int index;}
+{
+   LOOKAHEAD(2)
+   t=<ID>
+   {index=st.find(t.image);}
+   {cg.pushAddress(index);}
+   "="
+   assignmentTail()
+   {cg.emitInstruction("dupe");}
+   {cg.emitInstruction("rot");}
+   {cg.emitInstruction("stav");}
+ |
+   expr()
+   ";"
+}
+//------------------------------
+void printlnStatement(): {}
+{
+   "println"
+   "("
+   ( printArg() | {})
+   {cg.emitInstruction("pc", "'\\n'");}
+   {cg.emitInstruction("aout");}
+   ")"
+   ";"
+}
+//------------------------------
+void printStatement(): {}
+{
+   "print"
+   "("
+   printArg()
+   ")"
+   ";"
+}
+//------------------------------
+void printArg(): {Token t; String label;}
+{
+   t = <STRING>
+   {label = cg.getLabel();}
+   {cg.emitInstruction("pc", label);}
+   {cg.emitInstruction("sout");}
+   {cg.emitdw("^" + label, t.image);}
+  |
+   expr()
+   {cg.emitInstruction("dout");}
+}
+
+
+//------------------------------
+void nullStatement(): {}
+{
+   ";"
+}
+//------------------------------
+void compoundStatement(): {}
+{
+   "{"
+   {makeComment("{");}
+   (statement())*
+   "}"
+   {makeComment("}");}
+}
+//------------------------------
+void readintStatement(): {Token t; int index;}
+{
+   "readint"
+   "("
+   t=<ID>
+   {index=st.find(t.image);}
+   {cg.pushAddress(index);}
+   {cg.emitInstruction("din");}
+   {cg.emitInstruction("stav");}
+   ")"
+   ";"
+}
+//------------------------------
+void whileStatement(): {String label1, label2;}
+{
+   "while"
+   { label1=cg.getLabel(); }
+   { cg.emitLabel(label1); }
+   "("
+   expr()
+   ")"
+   { label2=cg.getLabel(); }
+   { cg.emitInstruction("jz", label2); }
+   statement()
+   { cg.emitInstruction("ja", label1); }
+   { cg.emitLabel(label2); }
+}
+//------------------------------
+void ifStatement(): {String label1;}
+{
+   "if"
+   "("
+   expr()
+   ")"
+   { label1=cg.getLabel(); }
+   { cg.emitInstruction("jz", label1); }
+   statement()
+   elsePart(label1)
+}
+//------------------------------
+void elsePart(String label1): {String label2;}
+{
+  "else"
+  { label2=cg.getLabel(); }
+  { cg.emitInstruction("ja", label2); }
+  { cg.emitLabel(label1); }
+  statement()
+  { cg.emitLabel(label2); }
+ |
+  { cg.emitLabel(label1); }
+}
+//------------------------------
+void doWhileStatement(): {String label1;}
+{
+   "do"
+   { label1 = cg.getLabel(); }
+   { cg.emitLabel(label1); }
+   statement()
+   "while"
+   "("
+   expr()
+   ")"
+   ";"
+   { cg.emitInstruction("jnz", label1); }
+}
+//------------------------------
+void functionCall(): {Token t; int count;}
+{
+   t=<ID>
+   {st.enter(t.image, 0, FUNCTIONCALL);}
+   "("
+   {count = 0;}
+   (count = argumentList())?
+   {cg.emitInstruction("call", t.image);}
+   {
+      if (count > 0)
+         cg.emitInstruction("asp",
+                               Integer.toString(count));
+   }
+   ")"
+   ";"
+}
+//------------------------------
+int argumentList(): {int count;}
+{
+   expr()
+   {count = 1;}
+   (
+      ","
+      expr()
+      {count++;}
+   )*
+   {return count;}
+}
+//------------------------------
+void expr(): {}
+{
+   term()
+   termList()
+}
+//------------------------------
+void termList(): {}
+{
+   "+"
+   term()
+   {cg.emitInstruction("add");}
+   termList()
+ |
+   "-"
+   term()
+   {cg.emitInstruction("sub");}
+   termList()
+ |
+   {}
+}
+//------------------------------
+void term(): {}
+{
+   factor()
+   factorList()
+}
+//------------------------------
+void factorList(): {}
+{
+   "*"
+   factor()
+   {cg.emitInstruction("mult");}
+   factorList()
+ |
+   "/"
+   factor()
+   {cg.emitInstruction("div");}
+   factorList()
+ |
+   {}
+}
+//------------------------------
+void factor(): {Token t; int index;}
+{
+   t=<UNSIGNED>
+   {cg.emitInstruction("pwc", t.image);}
+   {
+    if (t.image.length() > 5 || Integer.parseInt(t.image) > 32767)
+      throw genEx("Expecting integer (-32768 to 32767)");
+   }
+ |
+   "+"
+   factor()
+ |
+   "-"
+   negfactor()
+ |
+   t=<ID>
+   {index=st.find(t.image);}
+   {cg.push(index);}
+ |
+   "("
+   expr()
+   ")"
+}
+//------------------------------
+void negfactor() : {Token t; int index;}
+{
+  t=<UNSIGNED>
+  {cg.emitInstruction("pwc", "-" + t.image);}
+  {
+    if (t.image.length() > 5 || Integer.parseInt(t.image) > 32768)
+      throw genEx("Expecting integer (-32768 to 32767)");
+  }
+ |
+  t = <ID>
+  {index=st.find(t.image);}
+  {cg.push(index);}
+  {cg.emitInstruction("neg");}
+ |
+  "("
+  expr()
+  ")"
+  {cg.emitInstruction("neg");}
+ |
+  (LOOKAHEAD(1) "+")+
+  (
+    LOOKAHEAD(1)
+    "-"
+    factor()
+   |
+    factor()
+    {cg.emitInstruction("neg");}
+  )
+ |
+  "-"
+  factor()
+}
